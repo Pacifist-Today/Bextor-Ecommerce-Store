@@ -9,6 +9,7 @@ import ItemPage from "./ItemPage";
 
 class CatalogPage extends React.PureComponent {
     constructor(props) {
+
         super(props);
         this.state = {
             products: [],
@@ -16,12 +17,10 @@ class CatalogPage extends React.PureComponent {
             productsQueryError: null,
 
             categoryList:[],
-            categoriesQueryStatus: queryState.initial,
-            categoriesQueryError: null,
+            categoryQueryStatus: queryState.initial,
+            categoryQueryError: null,
 
-            categoryFilters: {
-
-            },
+            categoryFilters: {},
 
             titleInputValue: "",
             minPriceFilter: 1,
@@ -75,21 +74,25 @@ class CatalogPage extends React.PureComponent {
         })
     }
 
-    handleCategoryType = (name, value) => {
+    handleCategoryType = (id) => {
+        const categoryFilters = this.state.categoryFilters
+        categoryFilters[id] = !categoryFilters[id]
 
+        this.setState({
+            categoryFilters
+        })
     }
 
     handleParseCategoryList = () => {
         const categoryList = this.state.categoryList
-        console.log(categoryList)
+        // let categoryFilters = []
         let categoryFilters = {}
 
         for (let category of categoryList) {
-            let categoryName = category.name
-            categoryFilters[categoryName] = true
+            categoryFilters[category.id] = true
+            // categoryFilters.push({[category.id]: true})
+            // categoryFilters.push([category.id, true])
         }
-
-        categoryFilters = [categoryFilters]
 
         this.setState( {
             categoryFilters
@@ -99,7 +102,7 @@ class CatalogPage extends React.PureComponent {
     handleActiveItemValue = (id) => {
         this.setState({
             isItemActive: !this.state.isItemActive,
-            itemPageId: id
+            itemPageId: id,
         })
 
         const { products, categoryList, itemPageId } = this.state
@@ -116,14 +119,15 @@ class CatalogPage extends React.PureComponent {
                             return categoryNames.push(good.names)
                         })
                 }))
-        console.log(categoryNames)
-
+        this.setState({
+            categoryNames
+        })
+        return categoryNames
     }
 
     componentDidMount() {
         this.loadProductsList()
         this.loadCategoriesList()
-        this.handleParseCategoryList()
     }
 
     loadProductsList() {
@@ -174,7 +178,97 @@ class CatalogPage extends React.PureComponent {
             isNewFilter,
             isSaleFilter,
             isInStockFilter,
+
+            state
         } = this.state
+
+        let {
+            categoryFilters,
+        } = this.state
+
+        // let isPassed = true
+
+        // return products.filter(product => {
+        //
+        //     if (titleInputValue.trim() !== "") {
+        //         let isMatch = product.title.toLowerCase().includes(titleInputValue.toLowerCase())
+        //         isPassed = isPassed && isMatch
+        //     }
+        //
+        //     const price = parseFloat(product.price)
+        //     isPassed = isPassed && (
+        //         price >= minPriceFilter && price <= maxPriceFilter
+        //     )
+        //
+        //     const rating = +product.rating
+        //     isPassed = isPassed && (
+        //         rating >= minRatingFilter && rating <= maxRatingFilter
+        //     )
+        //
+        //     if(isNewFilter) {
+        //         isPassed = isPassed && product.isNew
+        //     }
+        //
+        //     if(isSaleFilter) {
+        //         isPassed = isPassed && product.isSale
+        //     }
+        //
+        //     if(isInStockFilter) {
+        //         isPassed = isPassed && product.isInStock
+        //     }
+
+        // categoryFilters = [
+        //     {
+        //         "Mindy McCullough": true,
+        //     },
+        //     {
+        //         "Devin Schimmel": true,
+        //     },
+        //     {
+        //         "Sheri Herzog": true,
+        //     },
+        //     {
+        //         "Deanna Hyatt": true,
+        //     },
+        //     {
+        //         "Nichole Weissnat": true,
+        //     },
+        //     {
+        //         "Clay Kuvalis": true
+        //     },
+        //     {
+        //         "Peggy Kozey DVM": true
+        //     },
+        //     {
+        //         "Sherri Stark DDS": true
+        //     },
+        //     {
+        //         "Thomas White": true
+        //     },
+        //     {
+        //         "Miss Seth Braun": true
+        //     },
+        //     {
+        //         "Jana Moore": true
+        //     },
+        //     {
+        //         "Anita Fadel": true
+        //     },
+        //     {
+        //         "Mrs. Nichole O'Hara": true
+        //     },
+        //     {
+        //         "April Mosciski": true
+        //     },
+        //     {
+        //         "Margie Bahringer": true
+        //     },
+        //     {
+        //         "Edmund Shanahan": true
+        //     }
+        // ]
+        //
+        // })
 
         return products.filter(product => {
             let isPassed = true
@@ -194,21 +288,38 @@ class CatalogPage extends React.PureComponent {
                 rating >= minRatingFilter && rating <= maxRatingFilter
             )
 
-            if(isNewFilter) {
+            if (isNewFilter) {
                 isPassed = isPassed && product.isNew
             }
 
-            if(isSaleFilter) {
+            if (isSaleFilter) {
                 isPassed = isPassed && product.isSale
             }
 
-            if(isInStockFilter) {
+            if (isInStockFilter) {
                 isPassed = isPassed && product.isInStock
+            }
+
+            // categoryFilters.filter(category => {
+            //     // console.log(category)
+            //     if (category[1] === true) {
+            //         console.log("test")
+            //         isPassed = isPassed && categoryFilters[1]
+            //     }
+            // })
+
+            for (let category in categoryFilters) {
+                console.log(categoryFilters[category])
+                // console.log(categoryFilters[category] === true)
+                if (categoryFilters[category] === true) {
+                    // console.log("test")
+                    // console.log(isPassed)
+                    isPassed = isPassed && categoryFilters[category]
+                }
             }
 
             return isPassed
         })
-
     }
 
     render() {
@@ -236,7 +347,6 @@ class CatalogPage extends React.PureComponent {
         const isError = productsQueryStatus === queryState.error
 
         console.log(categoryFilters)
-        // console.log(categoryList)
 
         let categoriesNames = []
 
@@ -253,6 +363,7 @@ class CatalogPage extends React.PureComponent {
                     categoryList={categoryList}
                     handleCategoryType={this.handleCategoryType}
                     categoryFilters={categoryFilters}
+                    handleParseCategoryList={this.handleParseCategoryList}
 
                     minPriceFilter={minPriceFilter}
                     maxPriceFilter={maxPriceFilter}
@@ -320,41 +431,6 @@ class CatalogPage extends React.PureComponent {
          </div>
             :
         null
-
-            // <div className="">
-            //     <div>
-            //         <Filters
-            //             titleInputValue={titleInputValue}
-            //             minPriceFilter={minPriceFilter}
-            //             maxPriceFilter={maxPriceFilter}
-            //             minRatingFilter={minRatingFilter}
-            //             maxRatingFilter={maxRatingFilter}
-            //             isNewFilter={isNewFilter}
-            //             isSaleFilter={isSaleFilter}
-            //             isInStockFilter={isInStockFilter}
-            //             handleInputTitle={this.handleInputTitle}
-            //             handlePriceValue={this.handlePriceValue}
-            //             handleRatingValue={this.handleRatingValue}
-            //             handleIsNewValue={this.handleIsNewValue}
-            //             handleIsSaleValue={this.handleIsSaleValue}
-            //             handleIsInStockValue={this.handleIsInStockValue}
-            //         />
-            //     </div>
-            //     <div>
-            //         {isLoading && (
-            //             <div>Loading...</div>
-            //         )}
-            //         {!isLoading && isSuccess && (
-            //             <ProductList products={filteredProducts} allProductsAmount={products.length} />
-            //         )}
-            //         {!isLoading && isError && (
-            //             <div>
-            //                 {productsQueryError?.message || "Something went wrong"}
-            //             </div>
-            //         )}
-            //     </div>
-            //
-            // </div>
         );
     }
 }

@@ -12,8 +12,6 @@ const ProductList = (props) => {
             <div style={{
                 display: "flex",
                 flexWrap: "wrap",
-                // marginLeft: "3%",
-                // marginRight: "3%"
             }}>
                 {products.map(product => {
                     return <ProductListItem

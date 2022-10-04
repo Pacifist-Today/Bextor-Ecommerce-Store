@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from "prop-types";
 
 const Filters = (props) => {
@@ -6,6 +6,7 @@ const Filters = (props) => {
         categoryList,
         handleCategoryType,
         categoryFilters,
+        handleParseCategoryList,
 
         titleInputValue,
         minPriceFilter,
@@ -68,9 +69,18 @@ const Filters = (props) => {
         handleIsInStockValue(!isInStockFilter)
     }
 
-    const onChangeCategoryType = () => {
-        handleCategoryType()
+    const onChangeCategoryType = ({target}) => {
+        handleCategoryType(target.value)
+        // const checkBoxValue = target.value
+        // const checkBoxChecked = target.checked
+        // const checkBox = {checkBoxValue: checkBoxChecked}
+
     }
+
+    useEffect(()=>{
+        handleParseCategoryList()
+        console.log(categoryFilters)
+    },[categoryList])
 
     return (
         <div>
@@ -107,28 +117,18 @@ const Filters = (props) => {
             </div>
             <ul>
                 <p>Filtering by categories</p>
-                {/*{categoryFilters.map((value, index) => {*/}
-                {/*    return (*/}
-                {/*        <li key={index}>*/}
-                {/*            <label>*/}
-                {/*                <input type="checkbox" checked="" onChange={onChangeCategoryType} />*/}
-                {/*                <span>{value.name}</span>*/}
-                {/*            </label>*/}
-                {/*        </li>*/}
-                {/*    );*/}
-                {/*})}*/}
-
-
-                {categoryList.map((value, index) => {
+                {
+                    categoryList.map((value, index) => {
                     return (
                         <li key={value.id}>
                             <label>
-                                <input type="checkbox" checked={true} onChange={onChangeCategoryType} />
+                                <input type="checkbox" value={value.id} checked={categoryFilters[value.id]} onChange={onChangeCategoryType} />
                                 <span>{value.name}</span>
                             </label>
                         </li>
                     );
-                })}
+                })
+                }
             </ul>
         </div>
     );
