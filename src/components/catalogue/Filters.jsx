@@ -79,7 +79,7 @@ const Filters = (props) => {
 
     useEffect(()=>{
         handleParseCategoryList()
-    },[])
+    },[categoryList])
 
     return (
         <div>

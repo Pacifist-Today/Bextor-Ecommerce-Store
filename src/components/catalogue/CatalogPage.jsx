@@ -94,7 +94,6 @@ class CatalogPage extends React.PureComponent {
         categoryList.map(category => {
             categoryFilters.push(category.id)
         })
-
         this.setState( {
             categoryFilters
         })
