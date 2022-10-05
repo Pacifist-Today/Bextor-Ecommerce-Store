@@ -71,16 +71,15 @@ const Filters = (props) => {
 
     const onChangeCategoryType = ({target}) => {
         handleCategoryType(target.value)
-        // const checkBoxValue = target.value
-        // const checkBoxChecked = target.checked
-        // const checkBox = {checkBoxValue: checkBoxChecked}
+    }
 
+    const onClickSelectAllCategories = () => {
+        handleParseCategoryList()
     }
 
     useEffect(()=>{
         handleParseCategoryList()
-        console.log(categoryFilters)
-    },[categoryList])
+    },[])
 
     return (
         <div>
@@ -117,17 +116,17 @@ const Filters = (props) => {
             </div>
             <ul>
                 <p>Filtering by categories</p>
+                <button onClick={onClickSelectAllCategories}>Select all</button>
                 {
-                    categoryList.map((value, index) => {
-                    return (
+                    categoryList.map(value => (
                         <li key={value.id}>
                             <label>
-                                <input type="checkbox" value={value.id} checked={categoryFilters[value.id]} onChange={onChangeCategoryType} />
+                                <input type="checkbox" value={value.id} checked={categoryFilters.includes(value.id)} onChange={onChangeCategoryType} />
                                 <span>{value.name}</span>
                             </label>
                         </li>
-                    );
-                })
+                    )
+                )
                 }
             </ul>
         </div>
