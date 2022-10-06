@@ -90,7 +90,6 @@ class CatalogPage extends React.PureComponent {
     handleParseCategoryList = () => {
         const categoryList = this.state.categoryList
         const categoryFilters = []
-        console.log('test')
         categoryList.map(category => {
             categoryFilters.push(category.id)
         })
@@ -100,7 +99,11 @@ class CatalogPage extends React.PureComponent {
     }
 
     handleActiveItemValue = (id) => {
-
+        const isItemActive = this.isItemActive
+        this.setState({
+            isItemActive: !isItemActive,
+            itemPageId: id
+        })
     }
 
     componentDidMount() {
@@ -282,28 +285,11 @@ class CatalogPage extends React.PureComponent {
             ?
          <div>
              {
-                 // products
-                     // .filter(product => product.id === itemPageId)
-                     // .map(product =>
-                     //     product.categories.map((value) => {
-                     //         return categoryList
-                     //             .filter((item) => item.id.includes(value))
-                     //             .map(good => {
-                     //                 console.log(good)
-                     //                 return categoriesNames.push(good.names)
-                     //             })
-                     //     }))
-                         <ItemPage
-                         // key={product.id}
-                         // titleInputValue={titleInputValue}
-                         // photo={product.photo}
-                         // isNewFilter={isNewFilter}
-                         // isSaleFilter={isSaleFilter}
-                         // price={product.price}
-                         // rating={product.rating}
-                         // categories={product.categories}
-                         // description={product.description}
-                     />
+                 products
+                     .filter(product => product.id === itemPageId)
+                     .map(item => {
+                         return <ItemPage key={item.id} item={item} products={products} categoryList={categoryList}/>
+                     })
              }
          </div>
             :
