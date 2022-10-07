@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
-import {useEffect} from "react";
+import { memo } from "react";
 
-const ItemPage = (props) => {
+const ItemPage = memo((props => {
     const {
         id,
         title,
@@ -12,7 +12,7 @@ const ItemPage = (props) => {
         isSale,
         categories,
         rating
-    } = props.item
+    } = props
     const products = props.products
     const categoryList = props.categoryList
 
@@ -37,6 +37,7 @@ const ItemPage = (props) => {
             <p>{"Price: $" + price}</p>
             <p>{"Rating: " + rating}</p>
             <button>В корзину</button>
+
             <p>{`Categories: ${categoryNames.map(category => {
                 return category.map(item => {
                     if (item.name) return item.name
@@ -67,7 +68,7 @@ const ItemPage = (props) => {
                                                 margin: "1%",
                                                 border: "1px solid black"
                                             }}
-                                             key={i}
+                                            key={i}
                                         >
                                             <img
                                                 style={{
@@ -82,17 +83,26 @@ const ItemPage = (props) => {
                                 }
                                 return null
                             })
-
                         })
                     }
                 </div>
             </div>
         </div>
     )
-}
+}))
 
 ItemPage.propTypes = {
-
+    id: PropTypes.string,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    price: PropTypes.string,
+    photo: PropTypes.string,
+    isNew: PropTypes.bool,
+    isSale: PropTypes.bool,
+    categories: PropTypes.arrayOf(PropTypes.string),
+    rating: PropTypes.number,
+    products: PropTypes.arrayOf(PropTypes.object),
+    categoryList: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default ItemPage

@@ -1,7 +1,7 @@
 import CatalogPage from "./components/catalogue/CatalogPage";
 import AppCss from "./App.css"
 
-const App = () => {
+const App = props => {
   return (
       <CatalogPage />
   );

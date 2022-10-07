@@ -1,12 +1,12 @@
-import React, {useEffect} from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from "prop-types";
 
-const Filters = (props) => {
+const Filters = memo((props => {
     const {
         categoryList,
         handleCategoryType,
         categoryFilters,
-        handleParseCategoryList,
+        setDefaultSelectedCategories,
 
         titleInputValue,
         minPriceFilter,
@@ -74,11 +74,11 @@ const Filters = (props) => {
     }
 
     const onClickSelectAllCategories = () => {
-        handleParseCategoryList()
+        setDefaultSelectedCategories()
     }
 
     useEffect(()=>{
-        handleParseCategoryList()
+        setDefaultSelectedCategories()
     },[categoryList])
 
     return (
@@ -119,19 +119,19 @@ const Filters = (props) => {
                 <button onClick={onClickSelectAllCategories}>Select all</button>
                 {
                     categoryList.map(value => (
-                        <li key={value.id}>
-                            <label>
-                                <input type="checkbox" value={value.id} checked={categoryFilters.includes(value.id)} onChange={onChangeCategoryType} />
-                                <span>{value.name}</span>
-                            </label>
-                        </li>
+                            <li key={value.id}>
+                                <label>
+                                    <input type="checkbox" value={value.id} checked={categoryFilters.includes(value.id)} onChange={onChangeCategoryType} />
+                                    <span>{value.name}</span>
+                                </label>
+                            </li>
+                        )
                     )
-                )
                 }
             </ul>
         </div>
     );
-}
+}))
 
 Filters.propTypes = {
     titleInputValue: PropTypes.string,
@@ -147,6 +147,17 @@ Filters.propTypes = {
     handleRatingValue: PropTypes.func,
     handleIsNewValue: PropTypes.func,
     handleIsSaleValue: PropTypes.func,
+
+    categoryList: PropTypes.arrayOf(PropTypes.shape({
+        avatar: PropTypes.string,
+        createdAt: PropTypes.string,
+        id: PropTypes.string,
+        name: PropTypes.string
+    })),
+
+    handleCategoryType: PropTypes.func,
+    categoryFilters: PropTypes.arrayOf(PropTypes.string),
+    setDefaultSelectedCategories: PropTypes.func
 }
 
 export default Filters;

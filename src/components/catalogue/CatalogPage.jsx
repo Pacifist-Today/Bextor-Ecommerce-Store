@@ -1,302 +1,244 @@
-import React from 'react';
+import React, {memo, useEffect, useMemo, useState, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import Filters from "./Filters";
 import ProductList from "./ProductList";
 import { queryState } from "./Query-State";
 import { getProductsList, getCategoryList } from "./api";
-import productList from "./ProductList";
 import ItemPage from "./ItemPage";
 
-class CatalogPage extends React.PureComponent {
-    constructor(props) {
+const CatalogPage = memo((props => {
 
-        super(props);
-        this.state = {
-            products: [],
-            productsQueryStatus: queryState.initial,
-            productsQueryError: null,
+    let [products, setProducts] = useState([])
+    products = useMemo(() => {
+        return products
+    }, [products])
 
-            categoryList:[],
-            categoryQueryStatus: queryState.initial,
-            categoryQueryError: null,
+    const [productsQueryStatus, setProductsQueryStatus] = useState(queryState.initial)
+    const [productsQueryError, setProductsQueryError] = useState(null)
 
-            categoryFilters: [],
+    const [categoryList, setCategoryList] = useState([])
+    const [categoryQueryStatus, setCategoryQueryStatus] = useState(queryState.initial)
+    const [categoryQueryError, setCategoryQueryError] = useState(null)
 
-            titleInputValue: "",
-            minPriceFilter: 1,
-            maxPriceFilter: 1000,
-            minRatingFilter: 1,
-            maxRatingFilter: 100,
-            isNewFilter: false,
-            isSaleFilter: false,
-            isInStockFilter: false,
+    let [categoryFilters, setCategoryFilters] = useState([])
+    const [titleInputValue, setTitleInputValue] = useState("")
+    const [minPriceFilter, setMinPriceFilter] = useState(1)
+    const [maxPriceFilter, setMaxPriceFilter] = useState(1000)
+    const [minRatingFilter, setMinRatingFilter] = useState(1)
+    const [maxRatingFilter, setMaxRatingFilter] = useState(100)
+    const [isNewFilter, setIsNewFilter] = useState(false)
+    const [isSaleFilter, setIsSaleFilter] = useState(false)
+    const [isInStockFilter, setIsInStockFilter] = useState(false)
 
-            isItemActive: false,
-            itemPageId: null
-        }
-    }
+    const [isProductPageActive, setIsProductPageActive] = useState(false)
+    const [itemPageId, setItemPageId] = useState(null)
 
-    handleInputTitle = (titleInputValue) => {
-        this.setState({
-            titleInputValue
-        })
-    }
+    const handleInputTitle = useCallback((titleInputValue) => {
+        setTitleInputValue(titleInputValue)
+    }, [])
 
-    handlePriceValue = (minPriceFilter, maxPriceFilter) => {
-        this.setState({
-            minPriceFilter,
-            maxPriceFilter
-        })
-    }
+    const handlePriceValue = useCallback((minPriceFilter, maxPriceFilter) => {
+        setMinPriceFilter(minPriceFilter)
+        setMaxPriceFilter(maxPriceFilter)
+    }, [])
 
-    handleRatingValue = (minRatingFilter, maxRatingFilter) => {
-        this.setState({
-            minRatingFilter,
-            maxRatingFilter
-        })
-    }
+    const handleRatingValue = useCallback((minRatingFilter, maxRatingFilter) => {
+        setMinRatingFilter(minRatingFilter)
+        setMaxRatingFilter(maxRatingFilter)
+    }, [])
 
-    handleIsNewValue = (isNewFilter) => {
-        this.setState({
-            isNewFilter
-        })
-    }
+    const handleIsNewValue = useCallback((isNewFilter) => {
+        setIsNewFilter(isNewFilter)
+    }, [])
 
-    handleIsSaleValue = (isSaleFilter) => {
-        this.setState({
-            isSaleFilter
-        })
-    }
+    const handleIsSaleValue = useCallback((isSaleFilter) => {
+        setIsSaleFilter(isSaleFilter)
+    }, [])
 
-    handleIsInStockValue = (isInStockFilter) => {
-        this.setState({
-            isInStockFilter
-        })
-    }
+    const handleIsInStockValue = useCallback((isInStockFilter) => {
+        setIsInStockFilter(isInStockFilter)
+    }, [])
 
-    handleCategoryType = (id) => {
-        let categoryFilters = this.state.categoryFilters
+    const handleCategoryType = useCallback((id) => {
         if (categoryFilters.includes(id)) {
             categoryFilters = categoryFilters.filter(item => item !== id)
-        }   else {
+        }
+        else {
             categoryFilters = [...categoryFilters, id]
         }
+        setCategoryFilters(categoryFilters)
+    }, [categoryFilters])
 
-        this.setState({
-            categoryFilters
-        })
-    }
-
-    handleParseCategoryList = () => {
-        const categoryList = this.state.categoryList
+    const setDefaultSelectedCategories = useCallback(() => {
         const categoryFilters = []
         categoryList.map(category => {
             categoryFilters.push(category.id)
         })
-        this.setState( {
-            categoryFilters
-        })
-    }
+        setCategoryFilters(categoryFilters)
+    }, [categoryList])
 
-    handleActiveItemValue = (id) => {
-        const isItemActive = this.isItemActive
-        this.setState({
-            isItemActive: !isItemActive,
-            itemPageId: id
-        })
-    }
+    const handleActiveItemValue = useCallback((id) => {
+        setIsProductPageActive(!isProductPageActive)
+        setItemPageId(id)
+    }, [])
 
-    componentDidMount() {
-        this.loadProductsList()
-        this.loadCategoriesList()
-        this.handleParseCategoryList()
-    }
+    useEffect(() => {
+        loadProductsList()
+        loadCategoriesList()
+        setDefaultSelectedCategories()
+        //@todo Надо посчитать мин макс прайс и рейтинг
+    }, [])
 
-    loadProductsList() {
-        this.setState({
-            productsQueryStatus: queryState.loading
-        })
+    const loadProductsList = () => {
+        setProductsQueryStatus(queryState.loading)
+
         getProductsList().then((productList => {
-            this.setState({
-                products: productList,
-                productsQueryStatus: queryState.success,
-                productsQueryError: null
-            })
+            setProducts(productList)
+            setProductsQueryStatus(queryState.success)
+            setProductsQueryError(null)
         })).catch(error => {
-            this.setState({
-                productsQueryStatus: queryState.error,
-                productsQueryError: error
-            })
+            setProductsQueryStatus(queryState.error)
+            setProductsQueryError(error)
         })
     }
 
-    loadCategoriesList() {
-        this.setState({
-            productsQueryStatus: queryState.loading
-        })
+    const loadCategoriesList = () => {
+        setCategoryQueryStatus(queryState.loading)
         getCategoryList().then((categoryList => {
-            this.setState({
-                categoryList,
-                categoryQueryStatus: queryState.success,
-                categoryQueryError: null
-            })
+            setCategoryList(categoryList)
+            setCategoryQueryStatus(queryState.success)
+            setCategoryQueryError(null)
         })).catch(error => {
-            this.setState({
-                categoryQueryStatus: queryState.error,
-                categoryQueryError: error
-            })
+            setCategoryQueryStatus(queryState.error)
+            setCategoryQueryError(error)
         })
     }
 
-    getFilteredProducts() {
-        const {
-            products,
-            categoryList,
-            titleInputValue,
-            minPriceFilter,
-            maxPriceFilter,
-            minRatingFilter,
-            maxRatingFilter,
-            isNewFilter,
-            isSaleFilter,
-            isInStockFilter,
-            categoryFilters
-        } = this.state
-
+    const getFilteredProducts = () => {
         return (
-        products.filter(product => {
-            let isPassed = true
+            products.filter(product => {
+                let isPassed = true
 
-            isPassed = !!product.categories.filter(category => categoryFilters.includes(category)).length
+                isPassed = !!product.categories.filter(category => categoryFilters.includes(category)).length
 
+                if (titleInputValue.trim()) {
+                    let isMatch = product.title.toLowerCase().includes(titleInputValue.toLowerCase())
+                    isPassed = isPassed && isMatch
+                }
 
-            if (titleInputValue.trim()) {
-                let isMatch = product.title.toLowerCase().includes(titleInputValue.toLowerCase())
-                isPassed = isPassed && isMatch
-            }
+                if (isPassed) {
+                    const price = parseFloat(product.price)
+                    isPassed = isPassed && (
+                        price >= minPriceFilter && price <= maxPriceFilter
+                    )
+                }
 
-            if (isPassed) {
-                const price = parseFloat(product.price)
-                isPassed = isPassed && (
-                    price >= minPriceFilter && price <= maxPriceFilter
-                )
-            }
+                if (isPassed) {
+                    const rating = +product.rating
+                    isPassed = isPassed && (
+                        rating >= minRatingFilter && rating <= maxRatingFilter
+                    )
+                }
 
-            if (isPassed) {
-                const rating = +product.rating
-                isPassed = isPassed && (
-                    rating >= minRatingFilter && rating <= maxRatingFilter
-                )
-            }
+                if (isPassed && isNewFilter) {
+                    isPassed = isPassed && product.isNew
+                }
 
-            if (isPassed && isNewFilter) {
-                isPassed = isPassed && product.isNew
-            }
+                if (isPassed && isSaleFilter) {
+                    isPassed = isPassed && product.isSale
+                }
 
-            if (isPassed && isSaleFilter) {
-                isPassed = isPassed && product.isSale
-            }
+                if (isPassed && isInStockFilter) {
+                    isPassed = isPassed && product.isInStock
+                }
 
-            if (isPassed && isInStockFilter) {
-                isPassed = isPassed && product.isInStock
-            }
-
-            return isPassed
+                return isPassed
             })
         )
     }
 
-    render() {
-        const {
-            products,
-            categoryList,
-            productsQueryStatus,
-            productsQueryError,
-            titleInputValue,
-            minPriceFilter,
-            maxPriceFilter,
-            minRatingFilter,
-            maxRatingFilter,
-            isNewFilter,
-            isSaleFilter,
-            isInStockFilter,
+    const isLoading = productsQueryStatus === queryState.loading || productsQueryStatus === queryState.initial
+    const isSuccess = productsQueryStatus === queryState.success
+    const isError = productsQueryStatus === queryState.error
 
-            isItemActive,
-            itemPageId,
-            categoryFilters
-        } = this.state
+    const filteredProducts = getFilteredProducts()
 
-        const isLoading = productsQueryStatus === queryState.loading || productsQueryStatus === queryState.initial
-        const isSuccess = productsQueryStatus === queryState.success
-        const isError = productsQueryStatus === queryState.error
-
-        const filteredProducts = this.getFilteredProducts()
-
-        return (
-            !isItemActive
+    return (
+        !isProductPageActive
             ?
             <div className="">
-            <div>
-                <Filters
-                    titleInputValue={titleInputValue}
-
-                    categoryList={categoryList}
-                    handleCategoryType={this.handleCategoryType}
-                    categoryFilters={categoryFilters}
-                    handleParseCategoryList={this.handleParseCategoryList}
-
-                    minPriceFilter={minPriceFilter}
-                    maxPriceFilter={maxPriceFilter}
-                    minRatingFilter={minRatingFilter}
-                    maxRatingFilter={maxRatingFilter}
-                    isNewFilter={isNewFilter}
-                    isSaleFilter={isSaleFilter}
-                    isInStockFilter={isInStockFilter}
-                    handleInputTitle={this.handleInputTitle}
-                    handlePriceValue={this.handlePriceValue}
-                    handleRatingValue={this.handleRatingValue}
-                    handleIsNewValue={this.handleIsNewValue}
-                    handleIsSaleValue={this.handleIsSaleValue}
-                    handleIsInStockValue={this.handleIsInStockValue}
-                />
-            </div>
-            <div>
-                {isLoading && (
-                    <div>Loading...</div>
-                )}
-                {!isLoading && isSuccess && (
-                    <ProductList
-                        products={filteredProducts}
-                        allProductsAmount={products.length}
-
-                        handleActiveItemValue={this.handleActiveItemValue}
+                <div>
+                    <Filters
+                        titleInputValue={titleInputValue}
+                        categoryList={categoryList}
+                        handleCategoryType={handleCategoryType}
+                        categoryFilters={categoryFilters}
+                        setDefaultSelectedCategories={setDefaultSelectedCategories}
+                        minPriceFilter={minPriceFilter}
+                        maxPriceFilter={maxPriceFilter}
+                        minRatingFilter={minRatingFilter}
+                        maxRatingFilter={maxRatingFilter}
+                        isNewFilter={isNewFilter}
+                        isSaleFilter={isSaleFilter}
+                        isInStockFilter={isInStockFilter}
+                        handleInputTitle={handleInputTitle}
+                        handlePriceValue={handlePriceValue}
+                        handleRatingValue={handleRatingValue}
+                        handleIsNewValue={handleIsNewValue}
+                        handleIsSaleValue={handleIsSaleValue}
+                        handleIsInStockValue={handleIsInStockValue}
                     />
-                )}
-                {!isLoading && isError && (
-                    <div>
-                        {productsQueryError?.message || "Something went wrong"}
-                    </div>
-                )}
-            </div>
+                </div>
+                <div>
+                    {isLoading && (
+                        <div>Loading...</div>
+                    )}
+                    {!isLoading && isSuccess && (
+                        <ProductList
+                            products={filteredProducts}
+                            allProductsAmount={products.length}
 
-        </div>
+                            handleActiveItemValue={handleActiveItemValue}
+                        />
+                    )}
+                    {!isLoading && isError && (
+                        <div>
+                            {productsQueryError?.message || "Something went wrong"}
+                        </div>
+                    )}
+                </div>
+
+            </div>
             :
-            isItemActive
-            ?
-         <div>
-             {
-                 products
-                     .filter(product => product.id === itemPageId)
-                     .map(item => {
-                         return <ItemPage key={item.id} item={item} products={products} categoryList={categoryList}/>
-                     })
-             }
-         </div>
-            :
-        null
-        );
-    }
-}
+            isProductPageActive
+                ?
+                <div>
+                    {
+                        products
+                            .filter(product => product.id === itemPageId)
+                            .map(item => {
+                                return <ItemPage
+                                    key={item.id}
+
+                                    id={item.id}
+                                    title={item.title}
+                                    description={item.description}
+                                    price={item.price}
+                                    photo={item.photo}
+                                    isNew={item.isNew}
+                                    isSale={item.isSale}
+                                    categories={item.categories}
+                                    rating={item.rating}
+
+                                    products={products}
+                                    categoryList={categoryList}/>
+                            })
+                    }
+                </div>
+                :
+                null
+    );
+}))
 
 CatalogPage.propTypes = {
 
