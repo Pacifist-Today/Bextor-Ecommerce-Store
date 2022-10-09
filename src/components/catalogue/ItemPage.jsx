@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { memo } from "react";
+import {memo, useMemo} from "react";
 
 const ItemPage = memo((props => {
     const {
@@ -13,20 +13,23 @@ const ItemPage = memo((props => {
         categories,
         rating
     } = props
-    const products = props.products
-    const categoryList = props.categoryList
+    const products = useMemo(() => props.products, [])
+    const categoryList = useMemo(() => props.categoryList, [])
 
-    const similarGoods = categories.map(item => {
-        return products.filter(value => {
-            return value.categories.includes(item) && value.id !== id
+    const similarGoods = useMemo(() =>
+        categories.map(item => {
+            return products.filter(value => {
+                return value.categories.includes(item) && value.id !== id
+            })
         })
-    })
+    , [])
 
     let similarGoodsCounter = 0
 
-    const categoryNames = categories.map(category => {
+    const categoryNames = useMemo(() =>
+        categories.map(category => {
         return categoryList.filter(item => item.id === category)
-    })
+    }), [])
 
     return (
         <div>

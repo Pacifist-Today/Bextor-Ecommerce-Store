@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, {memo, useCallback, useEffect, useMemo} from 'react';
 import PropTypes from "prop-types";
 
 const Filters = memo((props => {
@@ -24,62 +24,58 @@ const Filters = memo((props => {
         handleIsInStockValue
     } = props
 
-    const onChangeTitle = ({target}) => {
+    const onChangeTitle = useCallback(({target}) => {
         const value = target.value
         handleInputTitle(value)
-    }
+    }, [titleInputValue, handleInputTitle])
 
-    const onChangeMinPrice = ({target}) => {
+    const onChangeMinPrice = useCallback(({target}) => {
         let value = parseInt(target.value)
         value = Number.isNaN(value) ? 0 : value
 
         handlePriceValue(value, maxPriceFilter)
-    }
+    }, [minPriceFilter, maxPriceFilter, handlePriceValue])
 
-    const onChangeMaxPrice = ({target}) => {
+    const onChangeMaxPrice = useCallback(({target}) => {
         let value = parseInt(target.value)
         value = Number.isNaN(value) ? 0 : value
 
         handlePriceValue(minPriceFilter, value)
-    }
+    }, [minPriceFilter, maxPriceFilter, handlePriceValue])
 
-    const onChangeMinRating = ({target}) => {
+    const onChangeMinRating = useCallback(({target}) => {
         let value = parseInt(target.value)
         value = Number.isNaN(value) ? 0 : value
 
         handleRatingValue(value, maxRatingFilter)
-    }
+    }, [minRatingFilter, maxRatingFilter, handleRatingValue])
 
-    const onChangeMaxRating = ({target}) => {
+    const onChangeMaxRating = useCallback(({target}) => {
         let value = parseInt(target.value)
         value = Number.isNaN(value) ? 0 : value
 
         handleRatingValue(minRatingFilter, value)
-    }
+    }, [minRatingFilter, maxRatingFilter, handleRatingValue])
 
-    const onChangeIsNew = () => {
+    const onChangeIsNew = useCallback(()=> {
         handleIsNewValue(!isNewFilter)
-    }
+    }, [isNewFilter, handleIsNewValue])
 
-    const onChangeIsSale = () => {
+    const onChangeIsSale = useCallback(() => {
         handleIsSaleValue(!isSaleFilter)
-    }
+    }, [isSaleFilter, handleIsSaleValue])
 
-    const onChangeIsinStock = () => {
-        handleIsInStockValue(!isInStockFilter)
-    }
+    const onChangeIsinStock = useCallback(()=> {
+            handleIsInStockValue(!isInStockFilter)
+    }, [isInStockFilter, handleIsInStockValue])
 
-    const onChangeCategoryType = ({target}) => {
+    const onChangeCategoryType = useCallback(({target}) => {
         handleCategoryType(target.value)
-    }
+    }, [categoryFilters])
 
-    const onClickSelectAllCategories = () => {
+    const onClickSelectAllCategories = useCallback(() => {
         setDefaultSelectedCategories()
-    }
-
-    useEffect(()=>{
-        setDefaultSelectedCategories()
-    },[categoryList])
+    }, [categoryFilters])
 
     return (
         <div>

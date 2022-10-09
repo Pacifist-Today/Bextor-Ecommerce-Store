@@ -3,12 +3,8 @@ import PropTypes from "prop-types";
 import ProductListItem from "./ProductListItem";
 
 const ProductList = memo((props => {
-    let products = props.products
-    const allProductsAmount = props.allProductsAmount
-
-    // products = useMemo(() => {
-    //     return products
-    // }, [products])
+    let products = useMemo(() => props.products, [])
+    const allProductsAmount = useMemo(() => props.allProductsAmount, [])
 
     return (
         <div>

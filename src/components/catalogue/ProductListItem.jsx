@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, {memo, useCallback} from 'react';
 import PropTypes from "prop-types";
 
 const ProductListItem = memo((props => {
@@ -17,9 +17,9 @@ const ProductListItem = memo((props => {
         handleActiveItemValue
     } = props
 
-    const onClickIsItemActiveValue = () => {
+    const onClickIsItemActiveValue = useCallback(() => {
         handleActiveItemValue(id)
-    }
+    }, [])
 
     return (
         <div

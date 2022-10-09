@@ -8,11 +8,7 @@ import ItemPage from "./ItemPage";
 
 const CatalogPage = memo((props => {
 
-    let [products, setProducts] = useState([])
-    products = useMemo(() => {
-        return products
-    }, [products])
-
+    const [products, setProducts] = useState([])
     const [productsQueryStatus, setProductsQueryStatus] = useState(queryState.initial)
     const [productsQueryError, setProductsQueryError] = useState(null)
 
@@ -80,18 +76,21 @@ const CatalogPage = memo((props => {
     const handleActiveItemValue = useCallback((id) => {
         setIsProductPageActive(!isProductPageActive)
         setItemPageId(id)
-    }, [])
+    }, [isProductPageActive])
 
     useEffect(() => {
         loadProductsList()
         loadCategoriesList()
-        setDefaultSelectedCategories()
-        //@todo Надо посчитать мин макс прайс и рейтинг
+        //@todo Надо посчитать мин и макс прайс и рейтинг
+        //@todo Select all должен отображать 100 из 100
     }, [])
 
-    const loadProductsList = () => {
-        setProductsQueryStatus(queryState.loading)
+    useEffect(() => {
+        setDefaultSelectedCategories()
+    }, [categoryList, products])
 
+    const loadProductsList = useCallback(() => {
+        setProductsQueryStatus(queryState.loading)
         getProductsList().then((productList => {
             setProducts(productList)
             setProductsQueryStatus(queryState.success)
@@ -100,9 +99,9 @@ const CatalogPage = memo((props => {
             setProductsQueryStatus(queryState.error)
             setProductsQueryError(error)
         })
-    }
+    }, [])
 
-    const loadCategoriesList = () => {
+    const loadCategoriesList = useCallback(() => {
         setCategoryQueryStatus(queryState.loading)
         getCategoryList().then((categoryList => {
             setCategoryList(categoryList)
@@ -112,11 +111,17 @@ const CatalogPage = memo((props => {
             setCategoryQueryStatus(queryState.error)
             setCategoryQueryError(error)
         })
-    }
+    }, [])
 
-    const getFilteredProducts = () => {
-        return (
-            products.filter(product => {
+    const isLoading = useMemo(() =>
+        productsQueryStatus === queryState.loading
+        ||
+        productsQueryStatus === queryState.initial
+        , [productsQueryStatus])
+    const isSuccess = useMemo(() => productsQueryStatus === queryState.success, [productsQueryStatus])
+    const isError = useMemo(() => productsQueryStatus === queryState.error, [productsQueryStatus])
+
+    const filteredProducts = useMemo(() => products.filter(product => {
                 let isPassed = true
 
                 isPassed = !!product.categories.filter(category => categoryFilters.includes(category)).length
@@ -153,15 +158,8 @@ const CatalogPage = memo((props => {
                 }
 
                 return isPassed
-            })
-        )
-    }
-
-    const isLoading = productsQueryStatus === queryState.loading || productsQueryStatus === queryState.initial
-    const isSuccess = productsQueryStatus === queryState.success
-    const isError = productsQueryStatus === queryState.error
-
-    const filteredProducts = getFilteredProducts()
+            }
+        ), [categoryFilters, titleInputValue, minPriceFilter, maxPriceFilter, minRatingFilter, maxRatingFilter, isNewFilter, isSaleFilter, isInStockFilter])
 
     return (
         !isProductPageActive
