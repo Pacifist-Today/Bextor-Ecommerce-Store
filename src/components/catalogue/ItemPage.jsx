@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import {memo, useMemo} from "react";
+import {memo, useCallback, useMemo, useState} from "react";
+import OrderMainForm from "../ordering/OrderMainForm";
 
 const ItemPage = memo((props => {
     const {
@@ -13,6 +14,13 @@ const ItemPage = memo((props => {
         categories,
         rating
     } = props
+
+    const [isOrderMainFormActive, setOrderMainFormActive] = useState(false)
+
+    const onClickOrderMainPage = () => {
+        setOrderMainFormActive(!isOrderMainFormActive)
+    }
+
     const products = useMemo(() => props.products, [])
     const categoryList = useMemo(() => props.categoryList, [])
 
@@ -32,6 +40,8 @@ const ItemPage = memo((props => {
     }), [])
 
     return (
+        !isOrderMainFormActive
+        ?
         <div>
             <h4>{title}</h4>
             <img src={ `${photo}?v=${id}` } alt="item photo" />
@@ -39,7 +49,7 @@ const ItemPage = memo((props => {
             <p>{"On Sale: " + isSale}</p>
             <p>{"Price: $" + price}</p>
             <p>{"Rating: " + rating}</p>
-            <button>В корзину</button>
+            <button onClick={onClickOrderMainPage}>Оформить заказ</button>
 
             <p>{`Categories: ${categoryNames.map(category => {
                 return category.map(item => {
@@ -91,6 +101,8 @@ const ItemPage = memo((props => {
                 </div>
             </div>
         </div>
+            :
+            <OrderMainForm />
     )
 }))
 
