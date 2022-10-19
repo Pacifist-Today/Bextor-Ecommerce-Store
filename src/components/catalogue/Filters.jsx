@@ -1,5 +1,6 @@
-import React, {memo, useCallback, useEffect, useMemo} from 'react';
+import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import PropTypes from "prop-types";
+import {Box, Switch, FormControlLabel, FormGroup, TextField, Slider, Button} from "@mui/material";
 
 const Filters = memo((props => {
     const {
@@ -7,12 +8,17 @@ const Filters = memo((props => {
         handleCategoryType,
         categoryFilters,
         setDefaultSelectedCategories,
-
         titleInputValue,
         minPriceFilter,
         maxPriceFilter,
         minRatingFilter,
         maxRatingFilter,
+
+        lowestPrice,
+        highestPrice,
+        lowestRating,
+        highestRating,
+
         isNewFilter,
         isSaleFilter,
         isInStockFilter,
@@ -29,33 +35,33 @@ const Filters = memo((props => {
         handleInputTitle(value)
     }, [titleInputValue, handleInputTitle])
 
-    const onChangeMinPrice = useCallback(({target}) => {
-        let value = parseInt(target.value)
-        value = Number.isNaN(value) ? 0 : value
+    // const onChangeMinPrice = useCallback(({target}) => {
+    //     let value = parseInt(target.value)
+    //     value = Number.isNaN(value) ? 0 : value
+    //
+    //     handlePriceValue(value, maxPriceFilter)
+    // }, [minPriceFilter, maxPriceFilter, handlePriceValue])
+    //
+    // const onChangeMaxPrice = useCallback(({target}) => {
+    //     let value = parseInt(target.value)
+    //     value = Number.isNaN(value) ? 0 : value
+    //
+    //     handlePriceValue(minPriceFilter, value)
+    // }, [minPriceFilter, maxPriceFilter, handlePriceValue])
 
-        handlePriceValue(value, maxPriceFilter)
-    }, [minPriceFilter, maxPriceFilter, handlePriceValue])
-
-    const onChangeMaxPrice = useCallback(({target}) => {
-        let value = parseInt(target.value)
-        value = Number.isNaN(value) ? 0 : value
-
-        handlePriceValue(minPriceFilter, value)
-    }, [minPriceFilter, maxPriceFilter, handlePriceValue])
-
-    const onChangeMinRating = useCallback(({target}) => {
-        let value = parseInt(target.value)
-        value = Number.isNaN(value) ? 0 : value
-
-        handleRatingValue(value, maxRatingFilter)
-    }, [minRatingFilter, maxRatingFilter, handleRatingValue])
-
-    const onChangeMaxRating = useCallback(({target}) => {
-        let value = parseInt(target.value)
-        value = Number.isNaN(value) ? 0 : value
-
-        handleRatingValue(minRatingFilter, value)
-    }, [minRatingFilter, maxRatingFilter, handleRatingValue])
+    // const onChangeMinRating = useCallback(({target}) => {
+    //     let value = parseInt(target.value)
+    //     value = Number.isNaN(value) ? 0 : value
+    //
+    //     handleRatingValue(value, maxRatingFilter)
+    // }, [minRatingFilter, maxRatingFilter, handleRatingValue])
+    //
+    // const onChangeMaxRating = useCallback(({target}) => {
+    //     let value = parseInt(target.value)
+    //     value = Number.isNaN(value) ? 0 : value
+    //
+    //     handleRatingValue(minRatingFilter, value)
+    // }, [minRatingFilter, maxRatingFilter, handleRatingValue])
 
     const onChangeIsNew = useCallback(()=> {
         handleIsNewValue(!isNewFilter)
@@ -77,50 +83,78 @@ const Filters = memo((props => {
         setDefaultSelectedCategories()
     }, [categoryFilters])
 
+    const [priceRange, setPriceRange] = useState([+minPriceFilter, +maxPriceFilter]);
+
+    const onChangePriceValues = useCallback((event, newPrice) => {
+        handlePriceValue(newPrice[0], newPrice[1])
+        setPriceRange(newPrice);
+    }, [minPriceFilter, maxPriceFilter, handlePriceValue]);
+
+    const [ratingRange, setRatingRange] = useState([+minRatingFilter, +maxRatingFilter])
+
+    const onChangeRatingValues = (event, newRange) => {
+        handleRatingValue(newRange[0], newRange[1])
+        setRatingRange(newRange)
+    }
+
     return (
         <div>
             <div>
-                <input type="text" value={titleInputValue} onChange={onChangeTitle} />
+                <TextField id="standard-basic" label="I'm looking for..." variant="standard" onChange={onChangeTitle} />
             </div>
-            <div>
+            <Box sx={{ width: "100%"}}>
                 <p>Filtering by price:</p>
-                <span>From: <input type="number" value={minPriceFilter} min="0" max={maxPriceFilter - 1} onChange={onChangeMinPrice} /></span>
-                <span>To: <input type="number" value={maxPriceFilter} min={minPriceFilter + 1} onChange={onChangeMaxPrice} /></span>
-            </div>
-            <div>
+                <Slider
+                    value={priceRange}
+                    min={lowestPrice}
+                    max={highestPrice}
+                    onChange={onChangePriceValues}
+                    valueLabelDisplay="auto"
+                />
+            </Box>
+            <Box sx={{ width: "100%" }}>
                 <p>Filtering by rating:</p>
-                <span>From: <input type="number" value={minRatingFilter} min="0" max={maxRatingFilter - 1} onChange={onChangeMinRating} /></span>
-                <span>To: <input type="number" value={maxRatingFilter} min={minPriceFilter + 1} onChange={onChangeMaxRating} /></span>
-            </div>
-            <div>
-                <label>
-                    <input type="checkbox" checked={isNewFilter} onChange={onChangeIsNew} />
-                    <span>Novelty</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="checkbox" checked={isSaleFilter} onChange={onChangeIsSale} />
-                    <span>On sale</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="checkbox" checked={isInStockFilter} onChange={onChangeIsinStock} />
-                    <span>In stock</span>
-                </label>
-            </div>
+                <Slider
+                    value={ratingRange}
+                    min={lowestRating}
+                    max={highestRating}
+                    onChange={onChangeRatingValues}
+                    valueLabelDisplay="auto"
+                />
+            </Box>
+            <FormGroup>
+                <FormControlLabel
+                    control={
+                        <Switch checked={isNewFilter} onChange={onChangeIsNew} />
+                    }
+                    label="Novelty"
+                />
+                <FormControlLabel
+                    control={
+                        <Switch checked={isSaleFilter} onChange={onChangeIsSale} />
+                    }
+                    label="On sale"
+                />
+                <FormControlLabel
+                    control={
+                        <Switch checked={isInStockFilter} onChange={onChangeIsinStock} />
+                    }
+                    label="In stock"
+                />
+            </FormGroup>
             <ul>
                 <p>Filtering by categories</p>
-                <button onClick={onClickSelectAllCategories}>Select all</button>
+                <Button onClick={onClickSelectAllCategories}>Select all</Button>
                 {
                     categoryList.map(value => (
-                            <li key={value.id}>
-                                <label>
-                                    <input type="checkbox" value={value.id} checked={categoryFilters.includes(value.id)} onChange={onChangeCategoryType} />
-                                    <span>{value.name}</span>
-                                </label>
-                            </li>
+                        <Box key={value.id}>
+                            <FormControlLabel
+                                control={
+                                    <Switch value={value.id} checked={categoryFilters.includes(value.id)} onChange={onChangeCategoryType} />
+                                }
+                                label={value.name}
+                            />
+                        </Box>
                         )
                     )
                 }

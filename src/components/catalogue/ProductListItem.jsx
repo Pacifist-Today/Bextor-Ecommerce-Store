@@ -1,5 +1,7 @@
 import React, {memo, useCallback} from 'react';
 import PropTypes from "prop-types";
+import {Box, Card, CardMedia, CardContent, Typography, Button, CardActions} from "@mui/material";
+import {Link} from "react-router-dom";
 
 const ProductListItem = memo((props => {
     const {
@@ -14,34 +16,54 @@ const ProductListItem = memo((props => {
         isInStock,
         categories,
         rating,
-        handleActiveItemValue
+        handleIsProductPageActiveValue,
+        handleCartProductsValue,
+        cartList
     } = props
 
     const onClickIsItemActiveValue = useCallback(() => {
-        handleActiveItemValue(id)
+        handleIsProductPageActiveValue(id)
+    }, [])
+
+    const onClickCartProductsValue = useCallback(() => {
+        handleCartProductsValue(id)
     }, [])
 
     return (
-        <div
-            style={{
-                width: "23%",
-                margin: "1%",
-                border: "1px solid black"
-            }}
-        >
-            <img
-                style={{
-                    width: "100%"
-                }}
-                src={ `${photo}?v=${id}` }
-                alt="Item photo"/>
-            <h3 onClick={onClickIsItemActiveValue}>{title}</h3>
-            <p>{"Novelty: " + isNew}</p>
-            <p>{"On sales: " + isSale}</p>
-            <p>{`${"Price: " + price + "$"}`}</p>
-            <p>{"Rating: " + rating}</p>
-            <button>В корзину</button>
-        </div>
+        <Box>
+            <Card>
+                <CardMedia
+                    component="img"
+                    height="100%"
+                    image={`${photo}?v=${id}`}
+                    alt="item"
+                    onClick={onClickIsItemActiveValue}
+                />
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="h5" onClick={onClickIsItemActiveValue}>
+                        {title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {"Novelty: " + isNew}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {"On sales: " + isSale}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {`${"Price: " + price + "$"}`}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {"Rating: " + rating}
+                    </Typography>
+                </CardContent>
+                <CardActions>
+                    <Button size="small" onClick={onClickCartProductsValue}>
+                        {!cartList.includes(id) ? "Add to cart" : "Remove"}
+                    </Button>
+                    <Button to={`/product/${id}`} LinkComponent={Link} size="small">Learn More</Button>
+                </CardActions>
+            </Card>
+        </Box>
     );
 }))
 

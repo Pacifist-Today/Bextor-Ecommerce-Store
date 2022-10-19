@@ -6,6 +6,9 @@ import { queryState } from "./Query-State";
 import { getProductsList, getCategoryList } from "./api";
 import ItemPage from "./ItemPage";
 
+import {cart} from "../Stores/ReduxStore";
+import {Provider, useDispatch, useSelector} from "react-redux";
+
 const CatalogPage = memo((props => {
 
     const [products, setProducts] = useState([])
@@ -18,16 +21,59 @@ const CatalogPage = memo((props => {
 
     let [categoryFilters, setCategoryFilters] = useState([])
     const [titleInputValue, setTitleInputValue] = useState("")
-    const [minPriceFilter, setMinPriceFilter] = useState(1)
-    const [maxPriceFilter, setMaxPriceFilter] = useState(1000)
-    const [minRatingFilter, setMinRatingFilter] = useState(1)
-    const [maxRatingFilter, setMaxRatingFilter] = useState(100)
+    const [minPriceFilter, setMinPriceFilter] = useState(-Infinity)
+    const [maxPriceFilter, setMaxPriceFilter] = useState(Infinity)
+    const [minRatingFilter, setMinRatingFilter] = useState(Infinity)
+    const [maxRatingFilter, setMaxRatingFilter] = useState(-Infinity)
+
+    const [lowestPrice, setLowestPrice] = useState(null)
+    const [highestPrice, setHighestPrice] = useState(null)
+    const [lowestRating, setLowestRating] = useState(null)
+    const [highestRating, setHighestRating] = useState(null)
+
     const [isNewFilter, setIsNewFilter] = useState(false)
     const [isSaleFilter, setIsSaleFilter] = useState(false)
     const [isInStockFilter, setIsInStockFilter] = useState(false)
 
     const [isProductPageActive, setIsProductPageActive] = useState(false)
     const [itemPageId, setItemPageId] = useState(null)
+
+    let [cartList, setCartList] = useState([])
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    const handleCartList = useSelector((globalState) => {
+        return globalState.cartProducts.cartList
+    })
+
+    const dispatch = useDispatch()
+
+    const handleProductsCategoriesToReduxStore = () => {
+        dispatch({
+            type: "products",
+            products: products
+        })
+        // dispatch( {
+        //     type: "categories",
+        //     products: products
+        //     }
+        // )
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    const handleCartProductsValue = useCallback((id) => {
+        if (cartList.includes(id)) {
+            cartList = cartList.filter(cart => cart !== id)
+        }   else {
+            cartList = [...cartList, id]
+        }
+        setCartList(cartList)
+        dispatch({
+            type: "plus",
+            cartList: cartList
+        })
+    }, [])
 
     const handleInputTitle = useCallback((titleInputValue) => {
         setTitleInputValue(titleInputValue)
@@ -73,21 +119,54 @@ const CatalogPage = memo((props => {
         setCategoryFilters(categoryFilters)
     }, [categoryList])
 
-    const handleActiveItemValue = useCallback((id) => {
-        setIsProductPageActive(!isProductPageActive)
+    const handleIsProductPageActiveValue = useCallback((id, pageState) => {
+        if (pageState !== true) setIsProductPageActive(true)
+        // setIsProductPageActive(true)
         setItemPageId(id)
     }, [isProductPageActive])
 
     useEffect(() => {
         loadProductsList()
         loadCategoriesList()
-        //@todo Надо посчитать мин и макс прайс и рейтинг
         //@todo Select all должен отображать 100 из 100
     }, [])
 
     useEffect(() => {
+        handleProductsCategoriesToReduxStore()
         setDefaultSelectedCategories()
+        handlePriceRanges()
+        handleRatingRanges()
     }, [categoryList, products])
+
+    const handlePriceRanges = useCallback(() => {
+        let lowestPrice = Infinity
+        let highestPrice = -Infinity
+
+        products.map(product => {
+            if (lowestPrice > +product.price) lowestPrice = +product.price
+            if (highestPrice < +product.price) highestPrice = +product.price
+        })
+
+        setMinPriceFilter(lowestPrice)
+        setMaxPriceFilter(highestPrice)
+        setLowestPrice(lowestPrice)
+        setHighestPrice(highestPrice)
+    },[products])
+
+    const handleRatingRanges = () => {
+        let lowestRating = Infinity
+        let highestRating = -Infinity
+
+        products.map(product => {
+            if (lowestRating > product.rating) lowestRating = product.rating
+            if (highestRating < product.rating) highestRating = product.rating
+        })
+
+        setMinRatingFilter(lowestRating)
+        setMaxRatingFilter(highestRating)
+        setLowestRating(lowestRating)
+        setHighestRating(highestRating)
+    }
 
     const loadProductsList = useCallback(() => {
         setProductsQueryStatus(queryState.loading)
@@ -164,8 +243,15 @@ const CatalogPage = memo((props => {
     return (
         !isProductPageActive
             ?
-            <div className="">
-                <div>
+            <div style={{
+                display: "flex"
+            }}>
+                <div
+                    style={{
+                        width: "15%",
+                        padding: "15px"
+                    }}
+                >
                     <Filters
                         titleInputValue={titleInputValue}
                         categoryList={categoryList}
@@ -176,6 +262,12 @@ const CatalogPage = memo((props => {
                         maxPriceFilter={maxPriceFilter}
                         minRatingFilter={minRatingFilter}
                         maxRatingFilter={maxRatingFilter}
+
+                        lowestPrice={lowestPrice}
+                        highestPrice={highestPrice}
+                        lowestRating={lowestRating}
+                        highestRating={highestRating}
+
                         isNewFilter={isNewFilter}
                         isSaleFilter={isSaleFilter}
                         isInStockFilter={isInStockFilter}
@@ -187,7 +279,11 @@ const CatalogPage = memo((props => {
                         handleIsInStockValue={handleIsInStockValue}
                     />
                 </div>
-                <div>
+                <div
+                    style={{
+                        width: "85%"
+                    }}
+                >
                     {isLoading && (
                         <div>Loading...</div>
                     )}
@@ -196,7 +292,10 @@ const CatalogPage = memo((props => {
                             products={filteredProducts}
                             allProductsAmount={products.length}
 
-                            handleActiveItemValue={handleActiveItemValue}
+                            handleIsProductPageActiveValue={handleIsProductPageActiveValue}
+                            //////////////////////////////////////////////////
+                            handleCartProductsValue={handleCartProductsValue}
+                            cartList={cartList}
                         />
                     )}
                     {!isLoading && isError && (
@@ -229,7 +328,14 @@ const CatalogPage = memo((props => {
                                     rating={item.rating}
 
                                     products={products}
-                                    categoryList={categoryList}/>
+                                    categoryList={categoryList}
+
+                                    ////////////////////////////////
+                                    handleCartProductsValue={handleCartProductsValue}
+                                    cartList={cartList}
+                                    itemPageId={itemPageId}
+                                    handleIsProductPageActiveValue={handleIsProductPageActiveValue}
+                                />
                             })
                     }
                 </div>

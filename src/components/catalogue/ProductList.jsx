@@ -5,13 +5,19 @@ import ProductListItem from "./ProductListItem";
 const ProductList = memo((props => {
     const products = props.products
     const allProductsAmount = props.allProductsAmount
+    const handleCartProductsValue = props.handleCartProductsValue
+    const cartList = props.cartList
 
     return (
         <div>
-            <h2>Founded: {products.length} of {allProductsAmount}</h2>
+            <h2
+                style={{marginLeft: "25px"}}
+            >Founded: {products.length} of {allProductsAmount}</h2>
             <div style={{
-                display: "flex",
-                flexWrap: "wrap",
+                display: "grid",
+                gap: "10px",
+                gridTemplateColumns: "1fr 1fr 1fr 1fr",
+                margin: "0 25px"
             }}>
                 {products.map(product => {
                     return <ProductListItem
@@ -27,7 +33,10 @@ const ProductList = memo((props => {
                         isInStock={product.isInStock}
                         categories={product.categories}
                         rating={product.rating}
-                        handleActiveItemValue={props.handleActiveItemValue}
+                        handleIsProductPageActiveValue={props.handleIsProductPageActiveValue}
+                        ////////////////////////////////////////////////////
+                        handleCartProductsValue={handleCartProductsValue}
+                        cartList={cartList}
                     />
                 })}
             </div>
