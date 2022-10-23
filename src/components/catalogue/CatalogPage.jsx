@@ -38,40 +38,38 @@ const CatalogPage = memo((props => {
     const [isProductPageActive, setIsProductPageActive] = useState(false)
     const [itemPageId, setItemPageId] = useState(null)
 
-    let [cartList, setCartList] = useState([])
+    // let [cartList, setCartList] = useState([])
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    const handleCartList = useSelector((globalState) => {
-        return globalState.cartProducts.cartList
-    })
+    let cartList = useSelector((state) => state.cartProducts)
 
     const dispatch = useDispatch()
 
     const handleProductsCategoriesToReduxStore = () => {
         dispatch({
             type: "products",
-            products: products
+            payload: {
+                products: products
+            }
         })
-        // dispatch( {
-        //     type: "categories",
-        //     products: products
-        //     }
-        // )
+        dispatch( {
+            type: "categories",
+            payload: {
+                categories: categoryList
+            }
+        })
     }
 
     ////////////////////////////////////////////////////////////////////////////////
 
     const handleCartProductsValue = useCallback((id) => {
-        if (cartList.includes(id)) {
-            cartList = cartList.filter(cart => cart !== id)
-        }   else {
-            cartList = [...cartList, id]
-        }
-        setCartList(cartList)
         dispatch({
-            type: "plus",
-            cartList: cartList
+            type: "cartItem",
+            payload: {
+                id: id,
+                quantity: 1
+            }
         })
     }, [])
 
@@ -291,9 +289,7 @@ const CatalogPage = memo((props => {
                         <ProductList
                             products={filteredProducts}
                             allProductsAmount={products.length}
-
                             handleIsProductPageActiveValue={handleIsProductPageActiveValue}
-                            //////////////////////////////////////////////////
                             handleCartProductsValue={handleCartProductsValue}
                             cartList={cartList}
                         />
@@ -306,39 +302,39 @@ const CatalogPage = memo((props => {
                 </div>
 
             </div>
-            :
-            isProductPageActive
-                ?
-                <div>
-                    {
-                        products
-                            .filter(product => product.id === itemPageId)
-                            .map(item => {
-                                return <ItemPage
-                                    key={item.id}
-
-                                    id={item.id}
-                                    title={item.title}
-                                    description={item.description}
-                                    price={item.price}
-                                    photo={item.photo}
-                                    isNew={item.isNew}
-                                    isSale={item.isSale}
-                                    categories={item.categories}
-                                    rating={item.rating}
-
-                                    products={products}
-                                    categoryList={categoryList}
-
-                                    ////////////////////////////////
-                                    handleCartProductsValue={handleCartProductsValue}
-                                    cartList={cartList}
-                                    itemPageId={itemPageId}
-                                    handleIsProductPageActiveValue={handleIsProductPageActiveValue}
-                                />
-                            })
-                    }
-                </div>
+            // :
+            // isProductPageActive
+            //     ?
+            //     <div>
+            //         {
+            //             products
+            //                 .filter(product => product.id === itemPageId)
+            //                 .map(item => {
+            //                     return <ItemPage
+            //                         key={item.id}
+            //
+            //                         id={item.id}
+            //                         title={item.title}
+            //                         description={item.description}
+            //                         price={item.price}
+            //                         photo={item.photo}
+            //                         isNew={item.isNew}
+            //                         isSale={item.isSale}
+            //                         categories={item.categories}
+            //                         rating={item.rating}
+            //
+            //                         products={products}
+            //                         categoryList={categoryList}
+            //
+            //                         ////////////////////////////////
+            //                         handleCartProductsValue={handleCartProductsValue}
+            //                         cartList={cartList}
+            //                         itemPageId={itemPageId}
+            //                         handleIsProductPageActiveValue={handleIsProductPageActiveValue}
+            //                     />
+            //                 })
+            //         }
+            //     </div>
                 :
                 null
     );

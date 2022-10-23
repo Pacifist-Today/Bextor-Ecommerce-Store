@@ -34,7 +34,6 @@ const ProductList = memo((props => {
                         categories={product.categories}
                         rating={product.rating}
                         handleIsProductPageActiveValue={props.handleIsProductPageActiveValue}
-                        ////////////////////////////////////////////////////
                         handleCartProductsValue={handleCartProductsValue}
                         cartList={cartList}
                     />

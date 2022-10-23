@@ -2,6 +2,7 @@ import React, {memo, useCallback} from 'react';
 import PropTypes from "prop-types";
 import {Box, Card, CardMedia, CardContent, Typography, Button, CardActions} from "@mui/material";
 import {Link} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
 
 const ProductListItem = memo((props => {
     const {
@@ -21,13 +22,11 @@ const ProductListItem = memo((props => {
         cartList
     } = props
 
-    const onClickIsItemActiveValue = useCallback(() => {
-        handleIsProductPageActiveValue(id)
-    }, [])
-
     const onClickCartProductsValue = useCallback(() => {
         handleCartProductsValue(id)
     }, [])
+
+    const cartProducts = useSelector((state) => state.cartProducts)
 
     return (
         <Box>
@@ -37,10 +36,9 @@ const ProductListItem = memo((props => {
                     height="100%"
                     image={`${photo}?v=${id}`}
                     alt="item"
-                    onClick={onClickIsItemActiveValue}
                 />
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="h5" onClick={onClickIsItemActiveValue}>
+                    <Typography gutterBottom variant="h5" component="h5">
                         {title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
@@ -58,7 +56,7 @@ const ProductListItem = memo((props => {
                 </CardContent>
                 <CardActions>
                     <Button size="small" onClick={onClickCartProductsValue}>
-                        {!cartList.includes(id) ? "Add to cart" : "Remove"}
+                        {!cartProducts.has(id) ? "Add to cart" : "Remove"}
                     </Button>
                     <Button to={`/product/${id}`} LinkComponent={Link} size="small">Learn More</Button>
                 </CardActions>

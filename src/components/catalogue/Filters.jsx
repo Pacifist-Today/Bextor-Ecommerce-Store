@@ -13,12 +13,10 @@ const Filters = memo((props => {
         maxPriceFilter,
         minRatingFilter,
         maxRatingFilter,
-
         lowestPrice,
         highestPrice,
         lowestRating,
         highestRating,
-
         isNewFilter,
         isSaleFilter,
         isInStockFilter,
@@ -33,47 +31,19 @@ const Filters = memo((props => {
     const onChangeTitle = useCallback(({target}) => {
         const value = target.value
         handleInputTitle(value)
-    }, [titleInputValue, handleInputTitle])
-
-    // const onChangeMinPrice = useCallback(({target}) => {
-    //     let value = parseInt(target.value)
-    //     value = Number.isNaN(value) ? 0 : value
-    //
-    //     handlePriceValue(value, maxPriceFilter)
-    // }, [minPriceFilter, maxPriceFilter, handlePriceValue])
-    //
-    // const onChangeMaxPrice = useCallback(({target}) => {
-    //     let value = parseInt(target.value)
-    //     value = Number.isNaN(value) ? 0 : value
-    //
-    //     handlePriceValue(minPriceFilter, value)
-    // }, [minPriceFilter, maxPriceFilter, handlePriceValue])
-
-    // const onChangeMinRating = useCallback(({target}) => {
-    //     let value = parseInt(target.value)
-    //     value = Number.isNaN(value) ? 0 : value
-    //
-    //     handleRatingValue(value, maxRatingFilter)
-    // }, [minRatingFilter, maxRatingFilter, handleRatingValue])
-    //
-    // const onChangeMaxRating = useCallback(({target}) => {
-    //     let value = parseInt(target.value)
-    //     value = Number.isNaN(value) ? 0 : value
-    //
-    //     handleRatingValue(minRatingFilter, value)
-    // }, [minRatingFilter, maxRatingFilter, handleRatingValue])
+    }, [titleInputValue])
 
     const onChangeIsNew = useCallback(()=> {
         handleIsNewValue(!isNewFilter)
-    }, [isNewFilter, handleIsNewValue])
+    }, [isNewFilter])
 
     const onChangeIsSale = useCallback(() => {
         handleIsSaleValue(!isSaleFilter)
-    }, [isSaleFilter, handleIsSaleValue])
+    }, [isSaleFilter])
 
     const onChangeIsinStock = useCallback(()=> {
             handleIsInStockValue(!isInStockFilter)
-    }, [isInStockFilter, handleIsInStockValue])
+    }, [isInStockFilter])
 
     const onChangeCategoryType = useCallback(({target}) => {
         handleCategoryType(target.value)
@@ -88,14 +58,14 @@ const Filters = memo((props => {
     const onChangePriceValues = useCallback((event, newPrice) => {
         handlePriceValue(newPrice[0], newPrice[1])
         setPriceRange(newPrice);
-    }, [minPriceFilter, maxPriceFilter, handlePriceValue]);
+    }, []);
 
     const [ratingRange, setRatingRange] = useState([+minRatingFilter, +maxRatingFilter])
 
-    const onChangeRatingValues = (event, newRange) => {
+    const onChangeRatingValues = useCallback( (event, newRange) => {
         handleRatingValue(newRange[0], newRange[1])
         setRatingRange(newRange)
-    }
+    }, [])
 
     return (
         <div>

@@ -1,50 +1,35 @@
 import PropTypes from "prop-types";
 import {memo, useCallback, useMemo, useState} from "react";
-import OrderMainForm from "../ordering/OrderMainForm";
 import {Box, Card, CardMedia, CardContent, Typography, Button, CardActions, Paper} from "@mui/material";
 import {useParams} from "react-router";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {Link} from "react-router-dom";
 
 const ItemPage = memo((props => {
-    // const {
-    //     id,
-    //     title,
-    //     description,
-    //     price,
-    //     photo,
-    //     isNew,
-    //     isSale,
-    //     categories,
-    //     rating,
-    //     handleCartProductsValue,
-    //     cartList,
-    //     itemPageId,
-    //     handleIsProductPageActiveValue,
-    // } = props
-
     const { id } = useParams()
 
-    const productsList = useSelector(state => {
-        console.log(state)
-        return state.products.products
-    })
+    const cartList = useSelector(state => state.cartProducts)
+    const productsList = useSelector(state => state.products)
+    const categoryList = useSelector(state => state.categories)
 
-    console.log(productsList)
+    const itemPageProduct = productsList.filter(product => product.id === id)
 
-    console.log(id)
+    const dispatch = useDispatch()
 
-    const [isOrderMainFormActive, setOrderMainFormActive] = useState(false)
-
-    const onClickOrderMainPage = () => {
-        setOrderMainFormActive(!isOrderMainFormActive)
-    }
-
-    const products = useMemo(() => props.products, [])
-    const categoryList = useMemo(() => props.categoryList, [])
+    const {
+        title,
+        description,
+        price,
+        photo,
+        isNew,
+        isSale,
+        categories,
+        rating
+    } = itemPageProduct[0]
 
     const similarGoods = useMemo(() =>
         categories.map(item => {
-            return products.filter(value => {
+            return productsList.filter(value => {
                 return value.categories.includes(item) && value.id !== id
             })
         })
@@ -57,21 +42,17 @@ const ItemPage = memo((props => {
         return categoryList.filter(item => item.id === category)
     }), [])
 
-    const onClickCartProductsValue = useCallback(() => {
-        handleCartProductsValue(id)
-    }, [])
-
-    const onClickShowAnotherProductPage = ({target}) => {
-        const productId = target.dataset.productid
-        const activePage = true
-        handleIsProductPageActiveValue(productId, activePage)
+    const handleCartItems = () => {
+        dispatch({
+            type: "cartItem",
+            payload: {
+                id: id,
+                quantity: 1
+            }
+        })
     }
 
-    console.log(cartList)
-
     return (
-        !isOrderMainFormActive
-        ?
         <div>
             <div
                 style={{
@@ -99,9 +80,8 @@ const ItemPage = memo((props => {
                     <Typography variant="body1" component="p">
                         {"Rating: " + rating}
                     </Typography>
-                    <Button onClick={onClickOrderMainPage}>Оформить заказ</Button>
-                    <Button onClick={onClickCartProductsValue}>
-                        {!cartList.includes(id) ? "Add to cart" : "Remove"}
+                    <Button onClick={handleCartItems}>
+                        {!cartList.has(id) ? "Add to cart" : "Remove"}
                     </Button>
                     <Typography variant="body2" component="h2">{`Categories: ${categoryNames.map(category => {
                         return category.map(item => {
@@ -126,7 +106,6 @@ const ItemPage = memo((props => {
                     You also could be interested in:
                 </Typography>
                 <div style={{
-
                     display: "grid",
                     gap: "20px",
                     gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr",
@@ -142,43 +121,23 @@ const ItemPage = memo((props => {
                                 if (similarGoodsCounter < 6 && value.isInStock) {
                                     similarGoodsCounter++
                                     return (
-                                        // <div
-                                        //     style={{
-                                        //         width: "14%",
-                                        //         margin: "1%",
-                                        //         border: "1px solid black"
-                                        //     }}
-                                        //     key={i}
-                                        // >
-                                        //     <img
-                                        //         style={{
-                                        //             width: "100%"
-                                        //         }}
-                                        //         src={ `${value.photo}?v=${value.id}` }
-                                        //         onClick={onClickShowAnotherProductPage}
-                                        //         data-productid={value.id}
-                                        //     />
-                                        //     <h4 onClick={onClickShowAnotherProductPage} data-productid={value.id}>{value.title}</h4>
-                                        //     <p>{value.price}</p>
-                                        //
-                                        // </div>
                                         <Box key={value.id} style={{}}>
                                             <Card>
-                                                <CardMedia
-                                                    component="img"
-                                                    height="100%"
-                                                    image={`${value.photo}?v=${value.id}`}
-                                                    alt="item"
-                                                    data-productid={value.id}
-                                                    onClick={onClickShowAnotherProductPage}
-                                                />
+                                                <Link to={`/product/${value.id}`}>
+                                                    <CardMedia
+                                                        component="img"
+                                                        height="100%"
+                                                        image={`${value.photo}?v=${value.id}`}
+                                                        alt="item"
+                                                        data-productid={value.id}
+                                                    />
+                                                </Link>
                                                 <CardContent>
                                                     <Typography
                                                         gutterBottom
                                                         variant="h6"
                                                         component="h6"
                                                         data-productid={value.id}
-                                                        onClick={onClickShowAnotherProductPage}
                                                     >
                                                         {value.title}
                                                     </Typography>
@@ -186,11 +145,6 @@ const ItemPage = memo((props => {
                                                         {`${"Price: " + value.price + "$"}`}
                                                     </Typography>
                                                 </CardContent>
-                                                {/*<CardActions>*/}
-                                                {/*    <Button size="small" onClick={onClickCartProductsValue}>*/}
-                                                {/*        {!cartList.includes(value.id) ? "Add to cart" : "Remove"}*/}
-                                                {/*    </Button>*/}
-                                                {/*</CardActions>*/}
                                             </Card>
                                         </Box>
                                     )
@@ -202,8 +156,6 @@ const ItemPage = memo((props => {
                 </div>
             </div>
         </div>
-            :
-            <OrderMainForm />
     )
 }))
 

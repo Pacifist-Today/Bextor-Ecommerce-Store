@@ -1,6 +1,20 @@
-import {memo, useRef, useState} from "react";
+import {memo, useCallback, useRef, useState} from "react";
+import {Button} from "@mui/material";
+import {NavLink} from "react-router-dom";
+import OrderPreparation from "./OrderPreparation";
 
 const OrderMainForm = memo(props => {
+    const {
+        cartList,
+        totalSum
+    } = props
+
+    const [isOrderMade, setIsOrderMade] = useState(false)
+
+    const handleOrderMaking = useCallback(() => {
+        setIsOrderMade(!isOrderMade)
+    }, [])
+
     const firstNameRef = useRef(null)
     const lastNameRef = useRef(null)
     const countryRef = useRef(null)
@@ -17,18 +31,6 @@ const OrderMainForm = memo(props => {
 
     const onSubmitOrderForm = (e) => {
         e.preventDefault()
-
-        // console.log(!firstNameRef.current.value.trim().length)
-        // console.log(!lastNameRef.current.value.trim().length)
-        // console.log(!countryRef.current.value.trim().length)
-        // console.log(!phoneRef.current.value.trim().length)
-        // console.log(!cityRef.current.value.trim().length)
-        // console.log(!mainAddressRef.current.value.trim().length)
-        // console.log(!additionalAddressRef?.current.value.trim().length)
-        // console.log(!emailRef.current.value.trim().length)
-        // console.log(!deliveryTypeRef.current.value.trim().length)
-        // // console.log(!dontCallMeRef?.current.checked
-        // console.log(!commentRef?.current.value.trim().length)
 
         if (!firstNameRef.current.value.trim().length
             ||
@@ -70,11 +72,13 @@ const OrderMainForm = memo(props => {
         }
 
         setFormFieldsValue(formFieldsValue)
+
+        setIsOrderMade(!isOrderMade)
     }
 
-    console.log(formFieldsValue)
-
     return (
+        !isOrderMade
+        ?
         <div>
             <form
                 onSubmit={onSubmitOrderForm}
@@ -189,10 +193,17 @@ const OrderMainForm = memo(props => {
                     ref={commentRef}
                     placeholder="Share your opinion"
                 />
+                {/*<button type="submit" onClick={handleOrderMaking}>Continue</button>*/}
                 <button type="submit">Continue</button>
-                <button>No way back</button>
+                <Button LinkComponent={NavLink} to="/cart" >Cancel</Button>
             </form>
         </div>
+        :
+        <OrderPreparation
+            cartList={cartList}
+            totalSum={totalSum}
+            formFieldsValue={formFieldsValue}
+        />
     )
 })
 
