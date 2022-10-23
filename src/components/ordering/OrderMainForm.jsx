@@ -2,6 +2,7 @@ import {memo, useCallback, useRef, useState} from "react";
 import {Button} from "@mui/material";
 import {NavLink} from "react-router-dom";
 import OrderPreparation from "./OrderPreparation";
+import CartPage from "../cart/CartPage";
 
 const OrderMainForm = memo(props => {
     const {
@@ -10,9 +11,10 @@ const OrderMainForm = memo(props => {
     } = props
 
     const [isOrderMade, setIsOrderMade] = useState(false)
+    const [isActiveCartPage, setIsActiveCartPage] = useState(false)
 
-    const handleOrderMaking = useCallback(() => {
-        setIsOrderMade(!isOrderMade)
+    const handleActiveCartPage = useCallback(() => {
+        setIsActiveCartPage(!isActiveCartPage)
     }, [])
 
     const firstNameRef = useRef(null)
@@ -77,7 +79,7 @@ const OrderMainForm = memo(props => {
     }
 
     return (
-        !isOrderMade
+        !isOrderMade & !isActiveCartPage
         ?
         <div>
             <form
@@ -193,17 +195,24 @@ const OrderMainForm = memo(props => {
                     ref={commentRef}
                     placeholder="Share your opinion"
                 />
-                {/*<button type="submit" onClick={handleOrderMaking}>Continue</button>*/}
                 <button type="submit">Continue</button>
-                <Button LinkComponent={NavLink} to="/cart" >Cancel</Button>
+                <Button onClick={handleActiveCartPage} >Cancel</Button>
             </form>
         </div>
         :
+        isOrderMade
+        ?
         <OrderPreparation
             cartList={cartList}
             totalSum={totalSum}
             formFieldsValue={formFieldsValue}
         />
+        :
+        isActiveCartPage
+        ?
+        <CartPage />
+        :
+        null
     )
 })
 
