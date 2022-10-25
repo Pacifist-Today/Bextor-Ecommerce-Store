@@ -1,9 +1,8 @@
 import {createStore, combineReducers} from "redux";
 
 const cartProductsReducer = (cartList = new Map(), action) => {
-
+    cartList = structuredClone(cartList)
     if (action.type === "cartItem") {
-
         if (!cartList.has(action.payload.id)) {
             cartList.set(action.payload.id, action.payload.quantity)
             return cartList

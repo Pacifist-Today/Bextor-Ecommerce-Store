@@ -4,6 +4,7 @@ import {logDOM} from "@testing-library/react";
 import {NavLink} from "react-router-dom";
 import {Button} from "@mui/material";
 import OrderMainForm from "../ordering/OrderMainForm";
+import {cart} from "../Stores/ReduxStore";
 
 const CartPage = memo((props) => {
     const cartList = useSelector((state) => state.cartProducts)

@@ -1,17 +1,84 @@
-import {memo, useCallback, useRef, useState} from "react";
+import {memo, useCallback, useEffect, useRef, useState} from "react";
 import {Button} from "@mui/material";
 import {NavLink} from "react-router-dom";
 import OrderPreparation from "./OrderPreparation";
 import CartPage from "../cart/CartPage";
+import {useSelector} from "react-redux";
 
 const OrderMainForm = memo(props => {
     const {
-        cartList,
+        // cartList,
         totalSum
     } = props
 
+    const cartList = useSelector(state => state.cartProducts)
+
+    console.log(cartList)
+
     const [isOrderMade, setIsOrderMade] = useState(false)
     const [isActiveCartPage, setIsActiveCartPage] = useState(false)
+
+    /////////////////////////////////////////////////////////////////////////////
+    //Controlled inputs
+
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [country, setCountry] = useState("Ukraine")
+    const [phone, setPhone] = useState("")
+    const [city, setCity] = useState("")
+    const [mainAddress, setMainAddress] = useState("")
+    const [additionalAddress, setAdditionalAddress] = useState("")
+    const [email, setEmail] = useState("")
+    const [delivery, setDelivery] = useState("postalService")
+    const [dontCallMe, setDontCallMe] = useState(false)
+    const [comment, setComment] = useState("")
+
+    const onChangeFirstName = ({target}) => {
+        setFirstName(target.value)
+    }
+
+    const onChangeLastName = ({target}) => {
+        setLastName(target.value)
+    }
+
+    const onChangeCountry = ({target}) => {
+        setCountry(target.value)
+    }
+
+    const onChangePhone = ({target}) => {
+        setPhone(target.value)
+    }
+
+    const onChangeCity = ({target}) => {
+        setCity(target.value)
+    }
+
+    const onChangeMainAddress = ({target}) => {
+        setMainAddress(target.value)
+    }
+
+    const onChangeAdditionalAddress = ({target}) => {
+        setAdditionalAddress(target.value)
+    }
+
+    const onChangeEmail = ({target}) => {
+        setEmail(target.value)
+    }
+
+    const onChangeDelivery = ({target}) => {
+        setDelivery(target.value)
+    }
+
+    const onChangeDontCallMe = () => {
+        setDontCallMe(!dontCallMe)
+    }
+
+    const onChangeComment = ({target}) => {
+        setComment(target.value)
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+    // Uncontrolled inputs
 
     const handleActiveCartPage = useCallback(() => {
         setIsActiveCartPage(!isActiveCartPage)
@@ -30,6 +97,7 @@ const OrderMainForm = memo(props => {
     const commentRef = useRef(null)
 
     const [formFieldsValue, setFormFieldsValue] = useState(null)
+    console.log(formFieldsValue)
 
     const onSubmitOrderForm = (e) => {
         e.preventDefault()
@@ -53,20 +121,26 @@ const OrderMainForm = memo(props => {
         if (!emailRef.current.value.includes("@")) throw new Error("Incorrect email")
         if (commentRef.current.value.trim().length > 500) throw new Error("Much symbols in commentary")
 
-        firstNameRef.current.value = firstNameRef.current.value.charAt(0).toUpperCase() + firstNameRef.current.value.slice(1)
-        lastNameRef.current.value = lastNameRef.current.value.charAt(0).toUpperCase() + lastNameRef.current.value.slice(1)
-        cityRef.current.value = cityRef.current.value.charAt(0).toUpperCase() + cityRef.current.value.slice(1)
-        mainAddressRef.current.value = mainAddressRef.current.value.charAt(0).toUpperCase() + mainAddressRef.current.value.slice(1)
-        additionalAddressRef.current.value = additionalAddressRef.current.value.charAt(0).toUpperCase() + additionalAddressRef.current.value.slice(1)
+        const firstNameValue = firstNameRef.current.value.charAt(0).toUpperCase() + firstNameRef.current.value.slice(1)
+        const lastNameValue = lastNameRef.current.value.charAt(0).toUpperCase() + lastNameRef.current.value.slice(1)
+        const cityValue = cityRef.current.value.charAt(0).toUpperCase() + cityRef.current.value.slice(1)
+        const mainAddressValue = mainAddressRef.current.value.charAt(0).toUpperCase() + mainAddressRef.current.value.slice(1)
+        const additionalAddressValue = additionalAddressRef.current.value.charAt(0).toUpperCase() + additionalAddressRef.current.value.slice(1)
+
+        // firstNameRef.current.value = firstNameRef.current.value.charAt(0).toUpperCase() + firstNameRef.current.value.slice(1)
+        // lastNameRef.current.value = lastNameRef.current.value.charAt(0).toUpperCase() + lastNameRef.current.value.slice(1)
+        // cityRef.current.value = cityRef.current.value.charAt(0).toUpperCase() + cityRef.current.value.slice(1)
+        // mainAddressRef.current.value = mainAddressRef.current.value.charAt(0).toUpperCase() + mainAddressRef.current.value.slice(1)
+        // additionalAddressRef.current.value = additionalAddressRef.current.value.charAt(0).toUpperCase() + additionalAddressRef.current.value.slice(1)
 
         const formFieldsValue = {
-            firstName: firstNameRef.current.value,
-            lasName: lastNameRef.current.value,
+            firstName: firstNameValue,
+            lasName: lastNameValue,
             country: countryRef.current.value,
             phone: phoneRef.current.value,
-            city: cityRef.current.value,
-            mainAddress: mainAddressRef.current.value,
-            additionalAddress: additionalAddressRef.current.value,
+            city: cityValue,
+            mainAddress: mainAddressValue,
+            additionalAddress: additionalAddressValue,
             email: emailRef.current.value,
             deliveryType: deliveryTypeRef.current.value,
             dontCallMe: dontCallMeRef.current.checked,
@@ -79,7 +153,7 @@ const OrderMainForm = memo(props => {
     }
 
     return (
-        !isOrderMade & !isActiveCartPage
+        !isOrderMade && !isActiveCartPage
         ?
         <div>
             <form
@@ -96,6 +170,10 @@ const OrderMainForm = memo(props => {
                         ref={firstNameRef}
                         type="text"
                         placeholder="First Name"
+                        /////////////////////////// controlled input
+                        value={firstName}
+                        onChange={onChangeFirstName}
+                        /////////////////////////////
                         required
                     />
                 </span>
@@ -106,12 +184,23 @@ const OrderMainForm = memo(props => {
                         ref={lastNameRef}
                         type="text"
                         placeholder="Last Name"
+                        /////////////////////////// controlled input
+                        value={lastName}
+                        onChange={onChangeLastName}
+                        /////////////////////////////
                         required
                     />
                 </span>
                 <span>
                     <span>Choose your country </span>
-                    <select ref={countryRef} defaultValue="ukraine">
+                    <select
+                        ref={countryRef}
+                        // defaultValue="Ukraine"
+                        /////////////////////////// controlled input
+                        onChange={onChangeCountry}
+                        value="Ukraine"
+                        /////////////////////////////
+                    >
                         <option value="Ukraine">Ukraine</option>
                         <option value="Finland">Finland</option>
                         <option value="Dutch">Dutch</option>
@@ -124,6 +213,10 @@ const OrderMainForm = memo(props => {
                         ref={phoneRef}
                         type="tel"
                         placeholder="Phone number"
+                        /////////////////////////// controlled input
+                        onChange={onChangePhone}
+                        value={phone}
+                        /////////////////////////////
                         required
                     />
                 </span>
@@ -134,6 +227,10 @@ const OrderMainForm = memo(props => {
                         ref={cityRef}
                         type="text"
                         placeholder="City"
+                        /////////////////////////// controlled input
+                        onChange={onChangeCity}
+                        value={city}
+                        /////////////////////////////
                         required
                     />
                 </span>
@@ -144,6 +241,10 @@ const OrderMainForm = memo(props => {
                         ref={mainAddressRef}
                         type="text"
                         placeholder="Main address"
+                        /////////////////////////// controlled input
+                        onChange={onChangeMainAddress}
+                        value={mainAddress}
+                        /////////////////////////////
                         required
                     />
                 </span>
@@ -153,6 +254,10 @@ const OrderMainForm = memo(props => {
                         name="additionalAddress"
                         ref={additionalAddressRef}
                         type="text"
+                        /////////////////////////// controlled input
+                        onChange={onChangeAdditionalAddress}
+                        value={additionalAddress}
+                        /////////////////////////////
                         placeholder="Additional address"
                     />
                 </span>
@@ -163,6 +268,10 @@ const OrderMainForm = memo(props => {
                         ref={emailRef}
                         type="email"
                         placeholder="Email"
+                        /////////////////////////// controlled input
+                        onChange={onChangeEmail}
+                        value={email}
+                        /////////////////////////////
                         required
                     />
                 </span>
@@ -172,6 +281,9 @@ const OrderMainForm = memo(props => {
                         ref={deliveryTypeRef}
                         name="deliveryService"
                         value="postalService"
+                        /////////////////////////// controlled input
+                        onChange={onChangeDelivery}
+                        /////////////////////////////
                         type="radio"
                         defaultChecked="true"
                     />
@@ -180,6 +292,9 @@ const OrderMainForm = memo(props => {
                         ref={deliveryTypeRef}
                         name="deliveryService"
                         value="pickup"
+                        /////////////////////////// controlled input
+                        onChange={onChangeDelivery}
+                        /////////////////////////////
                         type="radio"
                     />
                 </span>
@@ -189,11 +304,18 @@ const OrderMainForm = memo(props => {
                         ref={dontCallMeRef}
                         name="dontCallMe"
                         type="checkbox"
+                        /////////////////////////// controlled input
+                        onChange={onChangeDontCallMe}
+                        /////////////////////////////
                     />
                 </span>
                 <textarea
                     ref={commentRef}
                     placeholder="Share your opinion"
+                    /////////////////////////// controlled input
+                    onChange={onChangeComment}
+                    value={comment}
+                    /////////////////////////////
                 />
                 <button type="submit">Continue</button>
                 <Button onClick={handleActiveCartPage} >Cancel</Button>
