@@ -1,10 +1,7 @@
 import {memo, useCallback, useState} from "react";
-import {Provider, useSelector, useDispatch} from "react-redux";
-import {logDOM} from "@testing-library/react";
-import {NavLink} from "react-router-dom";
-import {Button} from "@mui/material";
+import {useSelector, useDispatch} from "react-redux";
+import {Button, Typography, Card, Box} from "@mui/material";
 import OrderMainForm from "../ordering/OrderMainForm";
-import {cart} from "../Stores/ReduxStore";
 
 const CartPage = memo((props) => {
     const cartList = useSelector((state) => state.cartProducts)
@@ -70,33 +67,62 @@ const CartPage = memo((props) => {
             <div style={{
                 width:"80%",
                 display:"flex",
-                flexDirection: "column"
+                flexDirection: "column",
+                marginTop: "1%"
             }}>
                 {
                     products.map(product => {
                         for (let cartItem of cartList) {
                             if(product.id === cartItem[0]) {
                                 return (
-                                    <div key={product.id}>
-                                        <div style={{width:"50%"}}>
+                                    <Card
+                                        key={product.id}
+                                        style={{
+                                            margin: "1% 10%",
+                                            display: "flex",
+                                        }}
+                                    >
+                                        <div style={{width:"30%"}}>
                                             <img
                                                 alt="product"
                                                 src={`${product.photo}?v=${product.id}`}
                                                 style={{
+                                                    width: "100%",
+                                                    padding: "5%"
                                                 }}
                                             />
                                         </div>
-                                        <div>
-                                            <h4>{product.title}</h4>
-                                            <p>{product.price}$</p>
-                                            <p>quantity: {cartItem[1]}</p>
-                                            <p>Summ: {cartItem[1] * product.price}$</p>
-                                            <button data-productcartid={cartItem[0]} onClick={onClickSetProductInCart}>Delete</button>
-                                            <button data-productcartid={cartItem[0]} onClick={onClickAddQuantity}>Plus</button>
-                                            <input type={"text"} disabled={true} value={cartItem[1]}/>
-                                            <button data-productcartid={cartItem[0]} onClick={onClickSubQuantity}>Minus</button>
+                                        <div style={{
+                                                marginLeft: "50px",
+                                                display: "flex",
+                                                width: "100%",
+                                                justifyContent: "space-between"
+                                            }}
+                                        >
+                                            <Box sx={{width: "40%"}}>
+                                                <Typography variant="h6" component="h6" style={{marginTop: "30px"}}>{product.title}</Typography>
+                                                <Typography variant="subtitle1" component="p">Price: {product.price}$</Typography>
+                                                <Typography variant="subtitle1" component="p">Quantity: {cartItem[1]}</Typography>
+                                                <Typography variant="subtitle1" component="p">Summ: {cartItem[1] * product.price}$</Typography>
+                                            </Box>
+                                            <Box sx={{alignSelf: "center"}}>
+                                                <Button data-productcartid={cartItem[0]} onClick={onClickAddQuantity}>+</Button>
+                                                <input
+                                                    type={"text"}
+                                                    disabled={true}
+                                                    value={cartItem[1]}
+                                                    style={{
+                                                        width: "75px",
+                                                        textAlign: "center"
+                                                    }}
+                                                />
+                                                <Button data-productcartid={cartItem[0]} onClick={onClickSubQuantity}>-</Button>
+                                            </Box>
+                                            <Box style={{alignSelf: "flex-end"}}>
+                                                <Button data-productcartid={cartItem[0]} onClick={onClickSetProductInCart}>Delete</Button>
+                                            </Box>
                                         </div>
-                                    </div>
+                                    </Card>
                                 )
                             }
                         }
@@ -104,18 +130,23 @@ const CartPage = memo((props) => {
                     })
                 }
             </div>
-            <div style={{
+            <Card style={{
                 display: "flex",
                 flexDirection: "column",
                 width:"20%",
+                padding: "30px",
+                // margin: "60px 20px",
+                marginTop: "2%",
+                marginRight: "10%",
+                height: "max-content",
+                textAlign: "center"
             }}>
                 <div >
                     <p>In Summ: {totalSum}$</p>
                     <p>Products quantity: {productsQuantity}</p>
                 </div>
-                {/*<Button LinkComponent={NavLink} to="/ordering" >Make order</Button>*/}
                 <Button onClick={handleActiveOrderingForm}>Make order</Button>
-            </div>
+            </Card>
         </div>
         :
         isActiveOrdering

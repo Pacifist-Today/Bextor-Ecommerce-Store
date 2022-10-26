@@ -1,5 +1,5 @@
 import {memo, useCallback, useEffect, useRef, useState} from "react";
-import {Button} from "@mui/material";
+import {Button, Paper, TextField, FormLabel, FormControlLabel, FormControl, Radio, RadioGroup, InputLabel, Select, MenuItem, Checkbox} from "@mui/material";
 import {NavLink} from "react-router-dom";
 import OrderPreparation from "./OrderPreparation";
 import CartPage from "../cart/CartPage";
@@ -12,8 +12,6 @@ const OrderMainForm = memo(props => {
     } = props
 
     const cartList = useSelector(state => state.cartProducts)
-
-    console.log(cartList)
 
     const [isOrderMade, setIsOrderMade] = useState(false)
     const [isActiveCartPage, setIsActiveCartPage] = useState(false)
@@ -97,9 +95,13 @@ const OrderMainForm = memo(props => {
     const commentRef = useRef(null)
 
     const [formFieldsValue, setFormFieldsValue] = useState(null)
-    console.log(formFieldsValue)
+
+    // console.log(firstNameRef)
 
     const onSubmitOrderForm = (e) => {
+
+        console.log(firstNameRef)
+
         e.preventDefault()
 
         if (!firstNameRef.current.value.trim().length
@@ -152,10 +154,13 @@ const OrderMainForm = memo(props => {
         setIsOrderMade(!isOrderMade)
     }
 
+    console.log(delivery)
+    console.log(formFieldsValue)
+
     return (
         !isOrderMade && !isActiveCartPage
         ?
-        <div>
+        <div style={{display: "flex", justifyContent:"center"}}>
             <form
                 onSubmit={onSubmitOrderForm}
                 style={{
@@ -320,6 +325,123 @@ const OrderMainForm = memo(props => {
                 <button type="submit">Continue</button>
                 <Button onClick={handleActiveCartPage} >Cancel</Button>
             </form>
+
+            {/*<form onSubmit={onSubmitOrderForm} style={{*/}
+            {/*    display: "flex",*/}
+            {/*    flexDirection: "column",*/}
+            {/*    padding: "2% 3%",*/}
+            {/*    marginTop: "3%",*/}
+            {/*    }}*/}
+            {/*>*/}
+            {/*    <TextField*/}
+            {/*        required*/}
+            {/*        ref={firstNameRef}*/}
+            {/*        id="outlined-required"*/}
+            {/*        label="First Name"*/}
+            {/*        value={firstName}*/}
+            {/*        onChange={onChangeFirstName}*/}
+            {/*    />*/}
+            {/*    <TextField*/}
+            {/*        required*/}
+            {/*        ref={lastNameRef}*/}
+            {/*        id="outlined-required"*/}
+            {/*        label="Last Name"*/}
+            {/*        value={lastName}*/}
+            {/*        onChange={onChangeLastName}*/}
+            {/*    />*/}
+            {/*    <InputLabel id="demo-simple-select-label">Country</InputLabel>*/}
+            {/*    <Select*/}
+            {/*        labelId="demo-simple-select-label"*/}
+            {/*        ref={countryRef}*/}
+            {/*        id="demo-simple-select"*/}
+            {/*        value={country}*/}
+            {/*        label="Country"*/}
+            {/*        onChange={onChangeCountry}*/}
+            {/*    >*/}
+            {/*        <MenuItem value={"Ukraine"}>Ukraine</MenuItem>*/}
+            {/*        <MenuItem value={"Finland"}>Finland</MenuItem>*/}
+            {/*        <MenuItem value={"Dutch"}>Dutch</MenuItem>*/}
+            {/*    </Select>*/}
+            {/*    <TextField*/}
+            {/*        required*/}
+            {/*        ref={phoneRef}*/}
+            {/*        id="outlined-required"*/}
+            {/*        label="Phone"*/}
+            {/*        value={phone}*/}
+            {/*        onChange={onChangePhone}*/}
+            {/*    />*/}
+            {/*    <TextField*/}
+            {/*        required*/}
+            {/*        ref={cityRef}*/}
+            {/*        id="outlined-required"*/}
+            {/*        label="City"*/}
+            {/*        value={city}*/}
+            {/*        onChange={onChangeCity}*/}
+            {/*    />*/}
+            {/*    <TextField*/}
+            {/*        required*/}
+            {/*        ref={mainAddressRef}*/}
+            {/*        id="outlined-required"*/}
+            {/*        label="Main Address"*/}
+            {/*        value={mainAddress}*/}
+            {/*        onChange={onChangeMainAddress}*/}
+            {/*    />*/}
+            {/*    <TextField*/}
+            {/*        ref={additionalAddressRef}*/}
+            {/*        id="outlined-required"*/}
+            {/*        label="Additional Address"*/}
+            {/*        value={additionalAddress}*/}
+            {/*        onChange={onChangeAdditionalAddress}*/}
+            {/*    />*/}
+            {/*    <TextField*/}
+            {/*        required*/}
+            {/*        ref={emailRef}*/}
+            {/*        id="outlined-required"*/}
+            {/*        label="Email"*/}
+            {/*        type="email"*/}
+            {/*        value={email}*/}
+            {/*        onChange={onChangeEmail}*/}
+            {/*    />*/}
+            {/*    <FormLabel id="demo-radio-buttons-group-label">Delivery</FormLabel>*/}
+            {/*    <RadioGroup*/}
+            {/*        ref={deliveryTypeRef}*/}
+            {/*        aria-labelledby="demo-radio-buttons-group-label"*/}
+            {/*        defaultValue="postalService"*/}
+            {/*        name="radio-buttons-group"*/}
+            {/*        style={{display: "flex", flexDirection:"row"}}*/}
+            {/*    >*/}
+            {/*        <FormControlLabel*/}
+            {/*            value="postalService"*/}
+            {/*            control={<Radio />}*/}
+            {/*            label="Postal service"*/}
+            {/*            onChange={onChangeDelivery}*/}
+            {/*        />*/}
+            {/*        <FormControlLabel*/}
+            {/*            value="pickUp"*/}
+            {/*            control={<Radio />}*/}
+            {/*            label="Pickup"*/}
+            {/*            onChange={onChangeDelivery}*/}
+            {/*        />*/}
+            {/*    </RadioGroup>*/}
+            {/*    <FormControlLabel*/}
+            {/*        ref={dontCallMeRef}*/}
+            {/*        control={<Checkbox onChange={onChangeDontCallMe}*/}
+            {/*        />} label="Label" />*/}
+            {/*    <TextField*/}
+            {/*        ref={commentRef}*/}
+            {/*        id="outlined-multiline-static"*/}
+            {/*        label="Comment"*/}
+            {/*        multiline*/}
+            {/*        rows={4}*/}
+            {/*        placeholder="Write your point..."*/}
+            {/*        value={comment}*/}
+            {/*        onChange={onChangeComment}*/}
+            {/*    />*/}
+            {/*    <div style={{display: "flex", justifyContent:"center", marginTop: "20px"}}>*/}
+            {/*        <Button type="submit">Continue</Button>*/}
+            {/*        <Button onClick={handleActiveCartPage} >Cancel</Button>*/}
+            {/*    </div>*/}
+            {/*</form>*/}
         </div>
         :
         isOrderMade

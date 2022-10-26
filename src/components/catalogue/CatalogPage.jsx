@@ -8,6 +8,7 @@ import ItemPage from "./ItemPage";
 
 import {cart} from "../Stores/ReduxStore";
 import {Provider, useDispatch, useSelector} from "react-redux";
+import {Card} from "@mui/material";
 
 const CatalogPage = memo((props => {
 
@@ -110,6 +111,7 @@ const CatalogPage = memo((props => {
     }, [categoryFilters])
 
     const setDefaultSelectedCategories = useCallback(() => {
+        console.log(categoryList)
         const categoryFilters = []
         categoryList.map(category => {
             categoryFilters.push(category.id)
@@ -119,14 +121,12 @@ const CatalogPage = memo((props => {
 
     const handleIsProductPageActiveValue = useCallback((id, pageState) => {
         if (pageState !== true) setIsProductPageActive(true)
-        // setIsProductPageActive(true)
         setItemPageId(id)
     }, [isProductPageActive])
 
     useEffect(() => {
         loadProductsList()
         loadCategoriesList()
-        //@todo Select all должен отображать 100 из 100
     }, [])
 
     useEffect(() => {
@@ -247,35 +247,41 @@ const CatalogPage = memo((props => {
                 <div
                     style={{
                         width: "15%",
-                        padding: "15px"
+                        // padding: "20px"
                     }}
                 >
-                    <Filters
-                        titleInputValue={titleInputValue}
-                        categoryList={categoryList}
-                        handleCategoryType={handleCategoryType}
-                        categoryFilters={categoryFilters}
-                        setDefaultSelectedCategories={setDefaultSelectedCategories}
-                        minPriceFilter={minPriceFilter}
-                        maxPriceFilter={maxPriceFilter}
-                        minRatingFilter={minRatingFilter}
-                        maxRatingFilter={maxRatingFilter}
+                    <Card style={{
+                        padding: "25px",
+                        margin: "30px 15px"
+                        }}
+                    >
+                        <Filters
+                            titleInputValue={titleInputValue}
+                            categoryList={categoryList}
+                            handleCategoryType={handleCategoryType}
+                            categoryFilters={categoryFilters}
+                            setDefaultSelectedCategories={setDefaultSelectedCategories}
+                            minPriceFilter={minPriceFilter}
+                            maxPriceFilter={maxPriceFilter}
+                            minRatingFilter={minRatingFilter}
+                            maxRatingFilter={maxRatingFilter}
 
-                        lowestPrice={lowestPrice}
-                        highestPrice={highestPrice}
-                        lowestRating={lowestRating}
-                        highestRating={highestRating}
+                            lowestPrice={lowestPrice}
+                            highestPrice={highestPrice}
+                            lowestRating={lowestRating}
+                            highestRating={highestRating}
 
-                        isNewFilter={isNewFilter}
-                        isSaleFilter={isSaleFilter}
-                        isInStockFilter={isInStockFilter}
-                        handleInputTitle={handleInputTitle}
-                        handlePriceValue={handlePriceValue}
-                        handleRatingValue={handleRatingValue}
-                        handleIsNewValue={handleIsNewValue}
-                        handleIsSaleValue={handleIsSaleValue}
-                        handleIsInStockValue={handleIsInStockValue}
-                    />
+                            isNewFilter={isNewFilter}
+                            isSaleFilter={isSaleFilter}
+                            isInStockFilter={isInStockFilter}
+                            handleInputTitle={handleInputTitle}
+                            handlePriceValue={handlePriceValue}
+                            handleRatingValue={handleRatingValue}
+                            handleIsNewValue={handleIsNewValue}
+                            handleIsSaleValue={handleIsSaleValue}
+                            handleIsInStockValue={handleIsInStockValue}
+                        />
+                    </Card>
                 </div>
                 <div
                     style={{

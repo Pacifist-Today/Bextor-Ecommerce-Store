@@ -5,6 +5,7 @@ import ItemPage from "../catalogue/ItemPage";
 import MainMenu from "../MainMenu";
 import {cart} from "../Stores/ReduxStore";
 import {Provider} from "react-redux";
+import DeliveryInfoPage from "../delivery/DeliveryInfoPage";
 
 export function RouterNavigation () {
     return (
@@ -23,7 +24,7 @@ export function RouterNavigation () {
                 <Route path="/cart" element={<CartPage />} />
                 {/*<Route path="*" element={<Page404 />} />*/}
                 <Route path="/about" element={<CatalogPage />} />
-                <Route path="/delivery" element={<CatalogPage />} />
+                <Route path="/delivery" element={<DeliveryInfoPage />} />
             </Routes>
             {/*</Router>*/}
         </BrowserRouter>

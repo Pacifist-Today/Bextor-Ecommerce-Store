@@ -4,6 +4,9 @@ import {Box, Card, CardMedia, CardContent, Typography, Button, CardActions, Pape
 import {useParams} from "react-router";
 import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
+import FiberNewIcon from '@mui/icons-material/FiberNew';
+import {Badge} from "@mui/material";
+import MailIcon from '@mui/icons-material/Mail'
 
 const ItemPage = memo((props => {
     const { id } = useParams()
@@ -27,20 +30,17 @@ const ItemPage = memo((props => {
         rating
     } = itemPageProduct[0]
 
-    const similarGoods = useMemo(() =>
-        categories.map(item => {
+    const similarGoods = categories.map(item => {
             return productsList.filter(value => {
                 return value.categories.includes(item) && value.id !== id
             })
         })
-    , [])
 
     let similarGoodsCounter = 0
 
-    const categoryNames = useMemo(() =>
-        categories.map(category => {
+    const categoryNames = categories.map(category => {
         return categoryList.filter(item => item.id === category)
-    }), [])
+    })
 
     const handleCartItems = () => {
         dispatch({
@@ -58,32 +58,37 @@ const ItemPage = memo((props => {
                 style={{
                     display: "flex",
                     width: "100%",
-                    padding: "10px 35px"
+                    padding: "0 10%",
+                    margin: "30px auto"
             }}
             >
-                <div style={{width: "40%"}}>
+                <div style={{width: "35%"}}>
                     <img style={{width: "100%"}} src={ `${photo}?v=${id}` } alt="item photo" />
                 </div>
-                <div style={{width: "50%"}}>
-                    <Typography variant="h3" component="h3">
+                <div style={{
+                    width: "50%",
+                    paddingLeft: "10%"
+                    }}
+                >
+                    <Typography style={{marginBottom: "30px"}} variant="h3" component="h3">
                         {title}
                     </Typography>
-                    <Typography variant="body1" component="p">
+                    <Typography variant="h6" component="p">
                         {"Novelty: " + isNew}
                     </Typography>
-                    <Typography variant="body1" component="p">
+                    <Typography variant="h6" component="p">
                         {"On Sale: " + isSale}
                     </Typography>
-                    <Typography variant="body1" component="p">
+                    <Typography variant="h6" component="p">
                         {"Price: $" + price}
                     </Typography>
-                    <Typography variant="body1" component="p">
+                    <Typography variant="h6" component="p">
                         {"Rating: " + rating}
                     </Typography>
                     <Button onClick={handleCartItems}>
                         {!cartList.has(id) ? "Add to cart" : "Remove"}
                     </Button>
-                    <Typography variant="body2" component="h2">{`Categories: ${categoryNames.map(category => {
+                    <Typography variant="h6" component="h2">{`Categories: ${categoryNames.map(category => {
                         return category.map(item => {
                             if (item.name) return item.name
                             return null

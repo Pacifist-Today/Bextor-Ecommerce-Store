@@ -9,6 +9,8 @@ import {cart} from "./Stores/ReduxStore";
 import MainMenu from "./MainMenu";
 import RouterNavigation from "./Routes/RouterNavigation";
 import OrderMainForm from "./ordering/OrderMainForm";
+import DeliveryInfoPage from "./delivery/DeliveryInfoPage";
+import AboutUsInfoPage from "./about/AboutUsInfoPage";
 
 const mainMenu = memo((props) => {
     return (
@@ -17,8 +19,8 @@ const mainMenu = memo((props) => {
                 <nav>
                     <Button LinkComponent={NavLink} to="/" ><img src="" alt="Nice logo" /></Button>
                     <Button LinkComponent={NavLink} to="/catalog" >Catalog</Button>
-                    <Button>About us</Button>
-                    <Button>Delivery</Button>
+                    <Button LinkComponent={NavLink} to="/about" >About us</Button>
+                    <Button LinkComponent={NavLink} to="/delivery" >Delivery</Button>
                     <Button LinkComponent={NavLink} to="/cart" >Cart</Button>
                 </nav>
             </header>
@@ -48,14 +50,22 @@ const mainMenu = memo((props) => {
                             </Provider>
                         }
                     />
-                    {/*<Route*/}
-                    {/*    path="/ordering"*/}
-                    {/*    element={*/}
-                    {/*        <Provider store={cart}>*/}
-                    {/*            <OrderMainForm />*/}
-                    {/*        </Provider>*/}
-                    {/*    }*/}
-                    {/*/>*/}
+                    <Route
+                        path="/delivery"
+                        element={
+                            <Provider store={cart}>
+                                <DeliveryInfoPage />
+                            </Provider>
+                        }
+                    />
+                    <Route
+                        path="/about"
+                        element={
+                            <Provider store={cart}>
+                                <AboutUsInfoPage />
+                            </Provider>
+                        }
+                    />
                 </Routes>
             </main>
             <footer>
