@@ -6,17 +6,14 @@ import CartPage from "../cart/CartPage";
 import {useSelector} from "react-redux";
 import {store} from "../../redux/store";
 import {setOrderId} from "../../redux/ducks/OrderNumber-duck";
+import {useCart} from "../../redux/hooksCart";
 
 const OrderMainForm = memo(props => {
     const {
-        // cartList,
         totalSum
     } = props
 
-    const cartList = useSelector(state => {
-         // state.cartProducts
-        return state.cartList
-    })
+    const {cartList} = useCart()
 
     const [isOrderMade, setIsOrderMade] = useState(false)
     const [isActiveCartPage, setIsActiveCartPage] = useState(false)
