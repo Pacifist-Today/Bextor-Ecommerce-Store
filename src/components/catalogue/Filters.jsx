@@ -112,23 +112,21 @@ const Filters = memo((props => {
                     label="In stock"
                 />
             </FormGroup>
-            <ul>
-                <p>Filtering by categories</p>
-                <Button onClick={onClickSelectAllCategories}>Select all</Button>
-                {
-                    categoryList.map(value => (
-                        <Box key={value.id}>
-                            <FormControlLabel
-                                control={
-                                    <Switch value={value.id} checked={categoryFilters.includes(value.id)} onChange={onChangeCategoryType} />
-                                }
-                                label={value.name}
-                            />
-                        </Box>
-                        )
+            <p>Filtering by categories</p>
+            <Button onClick={onClickSelectAllCategories}>Select all</Button>
+            {
+                categoryList.map(value => (
+                    <Box key={value.id}>
+                        <FormControlLabel
+                            control={
+                                <Switch value={value.id} checked={categoryFilters.includes(value.id)} onChange={onChangeCategoryType} />
+                            }
+                            label={value.name}
+                        />
+                    </Box>
                     )
-                }
-            </ul>
+                )
+            }
         </div>
     );
 }))

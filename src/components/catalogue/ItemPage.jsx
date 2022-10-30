@@ -1,23 +1,19 @@
 import PropTypes from "prop-types";
-import {memo, useCallback, useMemo, useState} from "react";
-import {Box, Card, CardMedia, CardContent, Typography, Button, CardActions, Paper} from "@mui/material";
+import {memo} from "react";
+import {Box, Card, CardMedia, CardContent, Typography, Button} from "@mui/material";
 import {useParams} from "react-router";
 import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
-import FiberNewIcon from '@mui/icons-material/FiberNew';
-import {Badge} from "@mui/material";
-import MailIcon from '@mui/icons-material/Mail'
+import {useCart} from "../../redux/hooksCart";
+import {useProducts} from "../../redux/hooksProducts";
+import {useCategories} from "../../redux/hooksCategories";
 
-const ItemPage = memo((props => {
+const ItemPage = memo(() => {
     const { id } = useParams()
-
-    const cartList = useSelector(state => state.cartProducts)
-    const productsList = useSelector(state => state.products)
+    const {cartList, redactItemCart} = useCart()
+    const {products} = useProducts()
     const categoryList = useSelector(state => state.categories)
-
-    const itemPageProduct = productsList.filter(product => product.id === id)
-
-    const dispatch = useDispatch()
+    const itemPageProduct = products.filter(product => product.id === id)
 
     const {
         title,
@@ -31,7 +27,7 @@ const ItemPage = memo((props => {
     } = itemPageProduct[0]
 
     const similarGoods = categories.map(item => {
-            return productsList.filter(value => {
+            return products.filter(value => {
                 return value.categories.includes(item) && value.id !== id
             })
         })
@@ -43,13 +39,7 @@ const ItemPage = memo((props => {
     })
 
     const handleCartItems = () => {
-        dispatch({
-            type: "cartItem",
-            payload: {
-                id: id,
-                quantity: 1
-            }
-        })
+        redactItemCart(id)
     }
 
     return (
@@ -122,7 +112,7 @@ const ItemPage = memo((props => {
                             if (similarGoodsCounter > 6) {
                                 return null
                             }
-                            return item.map((value, i) => {
+                            return item.map(value => {
                                 if (similarGoodsCounter < 6 && value.isInStock) {
                                     similarGoodsCounter++
                                     return (
@@ -134,7 +124,6 @@ const ItemPage = memo((props => {
                                                         height="100%"
                                                         image={`${value.photo}?v=${value.id}`}
                                                         alt="item"
-                                                        data-productid={value.id}
                                                     />
                                                 </Link>
                                                 <CardContent>
@@ -142,7 +131,6 @@ const ItemPage = memo((props => {
                                                         gutterBottom
                                                         variant="h6"
                                                         component="h6"
-                                                        data-productid={value.id}
                                                     >
                                                         {value.title}
                                                     </Typography>
@@ -162,7 +150,7 @@ const ItemPage = memo((props => {
             </div>
         </div>
     )
-}))
+})
 
 ItemPage.propTypes = {
     id: PropTypes.string,

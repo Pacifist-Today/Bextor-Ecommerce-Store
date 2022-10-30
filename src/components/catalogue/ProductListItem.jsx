@@ -26,7 +26,10 @@ const ProductListItem = memo((props => {
         handleCartProductsValue(id)
     }, [])
 
-    const cartProducts = useSelector((state) => state.cartProducts)
+    const cartProducts = useSelector((state) => {
+        // state.cartProducts
+        return state.cartList
+    })
 
     return (
         <Box>

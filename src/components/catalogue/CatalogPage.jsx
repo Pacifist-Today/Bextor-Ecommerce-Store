@@ -1,14 +1,12 @@
 import React, {memo, useEffect, useMemo, useState, useCallback} from 'react';
-import PropTypes from 'prop-types';
 import Filters from "./Filters";
 import ProductList from "./ProductList";
 import { queryState } from "./Query-State";
 import { getProductsList, getCategoryList } from "./api";
-import ItemPage from "./ItemPage";
-
-import {cart} from "../Stores/ReduxStore";
-import {Provider, useDispatch, useSelector} from "react-redux";
 import {Card} from "@mui/material";
+import {useCart} from "../../redux/hooksCart"
+import {useProducts} from "../../redux/hooksProducts";
+import {useCategories} from "../../redux/hooksCategories"
 
 const CatalogPage = memo((props => {
 
@@ -39,39 +37,17 @@ const CatalogPage = memo((props => {
     const [isProductPageActive, setIsProductPageActive] = useState(false)
     const [itemPageId, setItemPageId] = useState(null)
 
-    // let [cartList, setCartList] = useState([])
-
-    ///////////////////////////////////////////////////////////////////////////////
-
-    let cartList = useSelector((state) => state.cartProducts)
-
-    const dispatch = useDispatch()
+    const {redactItemCart, cartList} = useCart()
+    const {installProductsList} = useProducts()
+    const {installCategoriesList} =useCategories()
 
     const handleProductsCategoriesToReduxStore = () => {
-        dispatch({
-            type: "products",
-            payload: {
-                products: products
-            }
-        })
-        dispatch( {
-            type: "categories",
-            payload: {
-                categories: categoryList
-            }
-        })
+        installProductsList(products)
+        installCategoriesList(categoryList)
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-
     const handleCartProductsValue = useCallback((id) => {
-        dispatch({
-            type: "cartItem",
-            payload: {
-                id: id,
-                quantity: 1
-            }
-        })
+        redactItemCart(id)
     }, [])
 
     const handleInputTitle = useCallback((titleInputValue) => {
@@ -111,7 +87,6 @@ const CatalogPage = memo((props => {
     }, [categoryFilters])
 
     const setDefaultSelectedCategories = useCallback(() => {
-        console.log(categoryList)
         const categoryFilters = []
         categoryList.map(category => {
             categoryFilters.push(category.id)
@@ -308,39 +283,6 @@ const CatalogPage = memo((props => {
                 </div>
 
             </div>
-            // :
-            // isProductPageActive
-            //     ?
-            //     <div>
-            //         {
-            //             products
-            //                 .filter(product => product.id === itemPageId)
-            //                 .map(item => {
-            //                     return <ItemPage
-            //                         key={item.id}
-            //
-            //                         id={item.id}
-            //                         title={item.title}
-            //                         description={item.description}
-            //                         price={item.price}
-            //                         photo={item.photo}
-            //                         isNew={item.isNew}
-            //                         isSale={item.isSale}
-            //                         categories={item.categories}
-            //                         rating={item.rating}
-            //
-            //                         products={products}
-            //                         categoryList={categoryList}
-            //
-            //                         ////////////////////////////////
-            //                         handleCartProductsValue={handleCartProductsValue}
-            //                         cartList={cartList}
-            //                         itemPageId={itemPageId}
-            //                         handleIsProductPageActiveValue={handleIsProductPageActiveValue}
-            //                     />
-            //                 })
-            //         }
-            //     </div>
                 :
                 null
     );

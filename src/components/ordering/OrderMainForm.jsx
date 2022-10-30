@@ -4,6 +4,8 @@ import {NavLink} from "react-router-dom";
 import OrderPreparation from "./OrderPreparation";
 import CartPage from "../cart/CartPage";
 import {useSelector} from "react-redux";
+import {store} from "../../redux/store";
+import {setOrderId} from "../../redux/ducks/OrderNumber-duck";
 
 const OrderMainForm = memo(props => {
     const {
@@ -11,7 +13,10 @@ const OrderMainForm = memo(props => {
         totalSum
     } = props
 
-    const cartList = useSelector(state => state.cartProducts)
+    const cartList = useSelector(state => {
+         // state.cartProducts
+        return state.cartList
+    })
 
     const [isOrderMade, setIsOrderMade] = useState(false)
     const [isActiveCartPage, setIsActiveCartPage] = useState(false)
@@ -75,6 +80,8 @@ const OrderMainForm = memo(props => {
         setComment(target.value)
     }
 
+    console.log(firstName, lastName, country, phone, city, mainAddress, additionalAddress, email, delivery, dontCallMe, comment)
+
     /////////////////////////////////////////////////////////////////////////////
     // Uncontrolled inputs
 
@@ -96,28 +103,23 @@ const OrderMainForm = memo(props => {
 
     const [formFieldsValue, setFormFieldsValue] = useState(null)
 
-    // console.log(firstNameRef)
-
     const onSubmitOrderForm = (e) => {
-
-        console.log(firstNameRef)
-
         e.preventDefault()
 
-        if (!firstNameRef.current.value.trim().length
-            ||
-            !lastNameRef.current.value.trim().length
-            ||
-            !countryRef.current.value.trim().length
-            ||
-            !cityRef.current.value.trim().length
-            ||
-            !mainAddressRef.current.value.trim().length
-            ||
-            !emailRef.current.value.trim().length
-            ||
-            !deliveryTypeRef.current.value
-        ) throw new Error("Empty input")
+        // if (!firstNameRef.current?.value.trim()
+        //     ||
+        //     !lastNameRef.current?.value.trim()
+        //     ||
+        //     !countryRef.current?.value.trim()
+        //     ||
+        //     !cityRef.current?.value.trim()
+        //     ||
+        //     !mainAddressRef.current?.value.trim()
+        //     ||
+        //     !emailRef.current?.value.trim()
+        //     ||
+        //     !deliveryTypeRef.current?.value
+        // ) throw new Error("Empty input")
 
         if (isNaN(+phoneRef.current.value)) throw new Error("Incorrect phone number")
         if (!emailRef.current.value.includes("@")) throw new Error("Incorrect email")
@@ -152,296 +154,310 @@ const OrderMainForm = memo(props => {
         setFormFieldsValue(formFieldsValue)
 
         setIsOrderMade(!isOrderMade)
+
+        store.dispatch(setOrderId())
     }
 
-    console.log(delivery)
-    console.log(formFieldsValue)
+    const styled = {
+        marginBottom: "20px"
+    }
 
     return (
         !isOrderMade && !isActiveCartPage
         ?
         <div style={{display: "flex", justifyContent:"center"}}>
-            <form
-                onSubmit={onSubmitOrderForm}
-                style={{
-                    display: "flex",
-                    flexDirection: "column"
-                }}
-            >
-                <span>
-                    <label htmlFor="firstName">First name </label>
-                    <input
-                        name="firstName"
-                        ref={firstNameRef}
-                        type="text"
-                        placeholder="First Name"
-                        /////////////////////////// controlled input
-                        value={firstName}
-                        onChange={onChangeFirstName}
-                        /////////////////////////////
-                        required
-                    />
-                </span>
-                <span>
-                    <label htmlFor="lastName">Last name </label>
-                    <input
-                        name="lastName"
-                        ref={lastNameRef}
-                        type="text"
-                        placeholder="Last Name"
-                        /////////////////////////// controlled input
-                        value={lastName}
-                        onChange={onChangeLastName}
-                        /////////////////////////////
-                        required
-                    />
-                </span>
-                <span>
-                    <span>Choose your country </span>
-                    <select
-                        ref={countryRef}
-                        // defaultValue="Ukraine"
-                        /////////////////////////// controlled input
-                        onChange={onChangeCountry}
-                        value="Ukraine"
-                        /////////////////////////////
-                    >
-                        <option value="Ukraine">Ukraine</option>
-                        <option value="Finland">Finland</option>
-                        <option value="Dutch">Dutch</option>
-                    </select>
-                </span>
-                <span>
-                    <label htmlFor="phone">Phone </label>
-                    <input
-                        name="phone"
-                        ref={phoneRef}
-                        type="tel"
-                        placeholder="Phone number"
-                        /////////////////////////// controlled input
-                        onChange={onChangePhone}
-                        value={phone}
-                        /////////////////////////////
-                        required
-                    />
-                </span>
-                <span>
-                    <label htmlFor="city">City </label>
-                    <input
-                        name="city"
-                        ref={cityRef}
-                        type="text"
-                        placeholder="City"
-                        /////////////////////////// controlled input
-                        onChange={onChangeCity}
-                        value={city}
-                        /////////////////////////////
-                        required
-                    />
-                </span>
-                <span>
-                    <label htmlFor="mainAddress">Main address </label>
-                    <input
-                        name="mainAddress"
-                        ref={mainAddressRef}
-                        type="text"
-                        placeholder="Main address"
-                        /////////////////////////// controlled input
-                        onChange={onChangeMainAddress}
-                        value={mainAddress}
-                        /////////////////////////////
-                        required
-                    />
-                </span>
-                <span>
-                    <label htmlFor="additionalAddress">Additional address </label>
-                    <input
-                        name="additionalAddress"
-                        ref={additionalAddressRef}
-                        type="text"
-                        /////////////////////////// controlled input
-                        onChange={onChangeAdditionalAddress}
-                        value={additionalAddress}
-                        /////////////////////////////
-                        placeholder="Additional address"
-                    />
-                </span>
-                <span>
-                    <label htmlFor="email">Email </label>
-                    <input
-                        name="email"
-                        ref={emailRef}
-                        type="email"
-                        placeholder="Email"
-                        /////////////////////////// controlled input
-                        onChange={onChangeEmail}
-                        value={email}
-                        /////////////////////////////
-                        required
-                    />
-                </span>
-                <span>
-                    <label htmlFor="postalService">Postal service </label>
-                    <input
-                        ref={deliveryTypeRef}
-                        name="deliveryService"
-                        value="postalService"
-                        /////////////////////////// controlled input
-                        onChange={onChangeDelivery}
-                        /////////////////////////////
-                        type="radio"
-                        defaultChecked="true"
-                    />
-                    <label htmlFor="pickup">Pickup </label>
-                    <input
-                        ref={deliveryTypeRef}
-                        name="deliveryService"
-                        value="pickup"
-                        /////////////////////////// controlled input
-                        onChange={onChangeDelivery}
-                        /////////////////////////////
-                        type="radio"
-                    />
-                </span>
-                <span>
-                    <label htmlFor="dontCallMe">Don't recall </label>
-                    <input
-                        ref={dontCallMeRef}
-                        name="dontCallMe"
-                        type="checkbox"
-                        /////////////////////////// controlled input
-                        onChange={onChangeDontCallMe}
-                        /////////////////////////////
-                    />
-                </span>
-                <textarea
-                    ref={commentRef}
-                    placeholder="Share your opinion"
-                    /////////////////////////// controlled input
-                    onChange={onChangeComment}
-                    value={comment}
-                    /////////////////////////////
-                />
-                <button type="submit">Continue</button>
-                <Button onClick={handleActiveCartPage} >Cancel</Button>
-            </form>
-
-            {/*<form onSubmit={onSubmitOrderForm} style={{*/}
-            {/*    display: "flex",*/}
-            {/*    flexDirection: "column",*/}
-            {/*    padding: "2% 3%",*/}
-            {/*    marginTop: "3%",*/}
+            {/*<form*/}
+            {/*    onSubmit={onSubmitOrderForm}*/}
+            {/*    style={{*/}
+            {/*        display: "flex",*/}
+            {/*        flexDirection: "column",*/}
+            {/*        marginTop: "3%"*/}
             {/*    }}*/}
             {/*>*/}
-            {/*    <TextField*/}
-            {/*        required*/}
-            {/*        ref={firstNameRef}*/}
-            {/*        id="outlined-required"*/}
-            {/*        label="First Name"*/}
-            {/*        value={firstName}*/}
-            {/*        onChange={onChangeFirstName}*/}
-            {/*    />*/}
-            {/*    <TextField*/}
-            {/*        required*/}
-            {/*        ref={lastNameRef}*/}
-            {/*        id="outlined-required"*/}
-            {/*        label="Last Name"*/}
-            {/*        value={lastName}*/}
-            {/*        onChange={onChangeLastName}*/}
-            {/*    />*/}
-            {/*    <InputLabel id="demo-simple-select-label">Country</InputLabel>*/}
-            {/*    <Select*/}
-            {/*        labelId="demo-simple-select-label"*/}
-            {/*        ref={countryRef}*/}
-            {/*        id="demo-simple-select"*/}
-            {/*        value={country}*/}
-            {/*        label="Country"*/}
-            {/*        onChange={onChangeCountry}*/}
-            {/*    >*/}
-            {/*        <MenuItem value={"Ukraine"}>Ukraine</MenuItem>*/}
-            {/*        <MenuItem value={"Finland"}>Finland</MenuItem>*/}
-            {/*        <MenuItem value={"Dutch"}>Dutch</MenuItem>*/}
-            {/*    </Select>*/}
-            {/*    <TextField*/}
-            {/*        required*/}
-            {/*        ref={phoneRef}*/}
-            {/*        id="outlined-required"*/}
-            {/*        label="Phone"*/}
-            {/*        value={phone}*/}
-            {/*        onChange={onChangePhone}*/}
-            {/*    />*/}
-            {/*    <TextField*/}
-            {/*        required*/}
-            {/*        ref={cityRef}*/}
-            {/*        id="outlined-required"*/}
-            {/*        label="City"*/}
-            {/*        value={city}*/}
-            {/*        onChange={onChangeCity}*/}
-            {/*    />*/}
-            {/*    <TextField*/}
-            {/*        required*/}
-            {/*        ref={mainAddressRef}*/}
-            {/*        id="outlined-required"*/}
-            {/*        label="Main Address"*/}
-            {/*        value={mainAddress}*/}
-            {/*        onChange={onChangeMainAddress}*/}
-            {/*    />*/}
-            {/*    <TextField*/}
-            {/*        ref={additionalAddressRef}*/}
-            {/*        id="outlined-required"*/}
-            {/*        label="Additional Address"*/}
-            {/*        value={additionalAddress}*/}
-            {/*        onChange={onChangeAdditionalAddress}*/}
-            {/*    />*/}
-            {/*    <TextField*/}
-            {/*        required*/}
-            {/*        ref={emailRef}*/}
-            {/*        id="outlined-required"*/}
-            {/*        label="Email"*/}
-            {/*        type="email"*/}
-            {/*        value={email}*/}
-            {/*        onChange={onChangeEmail}*/}
-            {/*    />*/}
-            {/*    <FormLabel id="demo-radio-buttons-group-label">Delivery</FormLabel>*/}
-            {/*    <RadioGroup*/}
-            {/*        ref={deliveryTypeRef}*/}
-            {/*        aria-labelledby="demo-radio-buttons-group-label"*/}
-            {/*        defaultValue="postalService"*/}
-            {/*        name="radio-buttons-group"*/}
-            {/*        style={{display: "flex", flexDirection:"row"}}*/}
-            {/*    >*/}
-            {/*        <FormControlLabel*/}
+            {/*    <span>*/}
+            {/*        <label htmlFor="firstName">First name </label>*/}
+            {/*        <input*/}
+            {/*            name="firstName"*/}
+            {/*            ref={firstNameRef}*/}
+            {/*            type="text"*/}
+            {/*            placeholder="First Name"*/}
+            {/*            /////////////////////////// controlled input*/}
+            {/*            value={firstName}*/}
+            {/*            onChange={onChangeFirstName}*/}
+            {/*            /////////////////////////////*/}
+            {/*            required*/}
+            {/*        />*/}
+            {/*    </span>*/}
+            {/*    <span>*/}
+            {/*        <label htmlFor="lastName">Last name </label>*/}
+            {/*        <input*/}
+            {/*            name="lastName"*/}
+            {/*            ref={lastNameRef}*/}
+            {/*            type="text"*/}
+            {/*            placeholder="Last Name"*/}
+            {/*            /////////////////////////// controlled input*/}
+            {/*            value={lastName}*/}
+            {/*            onChange={onChangeLastName}*/}
+            {/*            /////////////////////////////*/}
+            {/*            required*/}
+            {/*        />*/}
+            {/*    </span>*/}
+            {/*    <span>*/}
+            {/*        <span>Choose your country </span>*/}
+            {/*        <select*/}
+            {/*            ref={countryRef}*/}
+            {/*            // defaultValue="Ukraine"*/}
+            {/*            /////////////////////////// controlled input*/}
+            {/*            onChange={onChangeCountry}*/}
+            {/*            value="Ukraine"*/}
+            {/*            /////////////////////////////*/}
+            {/*        >*/}
+            {/*            <option value="Ukraine">Ukraine</option>*/}
+            {/*            <option value="Finland">Finland</option>*/}
+            {/*            <option value="Dutch">Dutch</option>*/}
+            {/*        </select>*/}
+            {/*    </span>*/}
+            {/*    <span>*/}
+            {/*        <label htmlFor="phone">Phone </label>*/}
+            {/*        <input*/}
+            {/*            name="phone"*/}
+            {/*            ref={phoneRef}*/}
+            {/*            type="tel"*/}
+            {/*            placeholder="Phone number"*/}
+            {/*            /////////////////////////// controlled input*/}
+            {/*            onChange={onChangePhone}*/}
+            {/*            value={phone}*/}
+            {/*            /////////////////////////////*/}
+            {/*            required*/}
+            {/*        />*/}
+            {/*    </span>*/}
+            {/*    <span>*/}
+            {/*        <label htmlFor="city">City </label>*/}
+            {/*        <input*/}
+            {/*            name="city"*/}
+            {/*            ref={cityRef}*/}
+            {/*            type="text"*/}
+            {/*            placeholder="City"*/}
+            {/*            /////////////////////////// controlled input*/}
+            {/*            onChange={onChangeCity}*/}
+            {/*            value={city}*/}
+            {/*            /////////////////////////////*/}
+            {/*            required*/}
+            {/*        />*/}
+            {/*    </span>*/}
+            {/*    <span>*/}
+            {/*        <label htmlFor="mainAddress">Main address </label>*/}
+            {/*        <input*/}
+            {/*            name="mainAddress"*/}
+            {/*            ref={mainAddressRef}*/}
+            {/*            type="text"*/}
+            {/*            placeholder="Main address"*/}
+            {/*            /////////////////////////// controlled input*/}
+            {/*            onChange={onChangeMainAddress}*/}
+            {/*            value={mainAddress}*/}
+            {/*            /////////////////////////////*/}
+            {/*            required*/}
+            {/*        />*/}
+            {/*    </span>*/}
+            {/*    <span>*/}
+            {/*        <label htmlFor="additionalAddress">Additional address </label>*/}
+            {/*        <input*/}
+            {/*            name="additionalAddress"*/}
+            {/*            ref={additionalAddressRef}*/}
+            {/*            type="text"*/}
+            {/*            /////////////////////////// controlled input*/}
+            {/*            onChange={onChangeAdditionalAddress}*/}
+            {/*            value={additionalAddress}*/}
+            {/*            /////////////////////////////*/}
+            {/*            placeholder="Additional address"*/}
+            {/*        />*/}
+            {/*    </span>*/}
+            {/*    <span>*/}
+            {/*        <label htmlFor="email">Email </label>*/}
+            {/*        <input*/}
+            {/*            name="email"*/}
+            {/*            ref={emailRef}*/}
+            {/*            type="email"*/}
+            {/*            placeholder="Email"*/}
+            {/*            /////////////////////////// controlled input*/}
+            {/*            onChange={onChangeEmail}*/}
+            {/*            value={email}*/}
+            {/*            /////////////////////////////*/}
+            {/*            required*/}
+            {/*        />*/}
+            {/*    </span>*/}
+            {/*    <span>*/}
+            {/*        <label htmlFor="postalService">Postal service </label>*/}
+            {/*        <input*/}
+            {/*            ref={deliveryTypeRef}*/}
+            {/*            name="deliveryService"*/}
             {/*            value="postalService"*/}
-            {/*            control={<Radio />}*/}
-            {/*            label="Postal service"*/}
+            {/*            /////////////////////////// controlled input*/}
             {/*            onChange={onChangeDelivery}*/}
+            {/*            /////////////////////////////*/}
+            {/*            type="radio"*/}
+            {/*            defaultChecked="true"*/}
             {/*        />*/}
-            {/*        <FormControlLabel*/}
-            {/*            value="pickUp"*/}
-            {/*            control={<Radio />}*/}
-            {/*            label="Pickup"*/}
+            {/*        <label htmlFor="pickup">Pickup </label>*/}
+            {/*        <input*/}
+            {/*            ref={deliveryTypeRef}*/}
+            {/*            name="deliveryService"*/}
+            {/*            value="pickup"*/}
+            {/*            /////////////////////////// controlled input*/}
             {/*            onChange={onChangeDelivery}*/}
+            {/*            /////////////////////////////*/}
+            {/*            type="radio"*/}
             {/*        />*/}
-            {/*    </RadioGroup>*/}
-            {/*    <FormControlLabel*/}
-            {/*        ref={dontCallMeRef}*/}
-            {/*        control={<Checkbox onChange={onChangeDontCallMe}*/}
-            {/*        />} label="Label" />*/}
-            {/*    <TextField*/}
+            {/*    </span>*/}
+            {/*    <span>*/}
+            {/*        <label htmlFor="dontCallMe">Don't recall </label>*/}
+            {/*        <input*/}
+            {/*            ref={dontCallMeRef}*/}
+            {/*            name="dontCallMe"*/}
+            {/*            type="checkbox"*/}
+            {/*            /////////////////////////// controlled input*/}
+            {/*            onChange={onChangeDontCallMe}*/}
+            {/*            /////////////////////////////*/}
+            {/*        />*/}
+            {/*    </span>*/}
+            {/*    <textarea*/}
             {/*        ref={commentRef}*/}
-            {/*        id="outlined-multiline-static"*/}
-            {/*        label="Comment"*/}
-            {/*        multiline*/}
-            {/*        rows={4}*/}
-            {/*        placeholder="Write your point..."*/}
-            {/*        value={comment}*/}
+            {/*        placeholder="Share your opinion"*/}
+            {/*        /////////////////////////// controlled input*/}
             {/*        onChange={onChangeComment}*/}
+            {/*        value={comment}*/}
+            {/*        /////////////////////////////*/}
             {/*    />*/}
-            {/*    <div style={{display: "flex", justifyContent:"center", marginTop: "20px"}}>*/}
-            {/*        <Button type="submit">Continue</Button>*/}
-            {/*        <Button onClick={handleActiveCartPage} >Cancel</Button>*/}
-            {/*    </div>*/}
+            {/*    <button type="submit">Continue</button>*/}
+            {/*    <Button onClick={handleActiveCartPage} >Cancel</Button>*/}
             {/*</form>*/}
+
+            <form onSubmit={onSubmitOrderForm} style={{
+                display: "flex",
+                flexDirection: "column",
+
+                padding: "2% 3%",
+                marginTop: "3%",
+                }}
+            >
+                <p>Personal information</p>
+                <div style={{display: "flex"}}>
+                    <TextField
+                        required
+                        inputRef={firstNameRef}
+                        id="outlined-required"
+                        label="First Name"
+                        value={firstName}
+                        onChange={onChangeFirstName}
+                    />
+                    <TextField
+                        required
+                        inputRef={lastNameRef}
+                        id="outlined-required"
+                        label="Last Name"
+                        value={lastName}
+                        onChange={onChangeLastName}
+                    />
+                </div>
+                <p>Contact information</p>
+                <div style={{display:"flex", }}>
+                    <TextField
+                        required
+                        inputRef={phoneRef}
+                        id="outlined-required"
+                        label="Phone"
+                        value={phone}
+                        onChange={onChangePhone}
+                    />
+                    <TextField
+                        required
+                        inputRef={emailRef}
+                        id="outlined-required"
+                        label="Email"
+                        type="email"
+                        value={email}
+                        onChange={onChangeEmail}
+                    />
+                </div>
+                <p>Address</p>
+                <div style={{display:"flex"}}>
+                    {/*<InputLabel id="demo-simple-select-label">Country</InputLabel>*/}
+                    {/*<p>Country</p>*/}
+                    <Select
+                        labelId="demo-simple-select-label"
+                        inputRef={countryRef}
+                        id="demo-simple-select"
+                        value={country}
+                        label="Country"
+                        onChange={onChangeCountry}
+                    >
+                        <MenuItem value={"Ukraine"}>Ukraine</MenuItem>
+                        <MenuItem value={"Finland"}>Finland</MenuItem>
+                        <MenuItem value={"Dutch"}>Dutch</MenuItem>
+                    </Select>
+                    <TextField
+                        required
+                        inputRef={cityRef}
+                        id="outlined-required"
+                        label="City"
+                        value={city}
+                        onChange={onChangeCity}
+                    />
+                    <TextField
+                        required
+                        inputRef={mainAddressRef}
+                        id="outlined-required"
+                        label="Main Address"
+                        value={mainAddress}
+                        onChange={onChangeMainAddress}
+                    />
+                    <TextField
+                        inputRef={additionalAddressRef}
+                        id="outlined-required"
+                        label="Additional Address"
+                        value={additionalAddress}
+                        onChange={onChangeAdditionalAddress}
+                    />
+                </div>
+                <FormLabel id="demo-radio-buttons-group-label">Delivery</FormLabel>
+                <RadioGroup
+                    // inputRef={deliveryTypeRef}
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    defaultValue="postalService"
+                    name="radio-buttons-group"
+                    style={{display: "flex", flexDirection:"row"}}
+                >
+                    <FormControlLabel
+                        value="postalService"
+                        control={<Radio inputRef={deliveryTypeRef} />}
+                        label="Postal service"
+                        onChange={onChangeDelivery}
+                    />
+                    <FormControlLabel
+                        value="pickUp"
+                        control={<Radio inputRef={deliveryTypeRef} />}
+                        label="Pickup"
+                        onChange={onChangeDelivery}
+                    />
+                </RadioGroup>
+                <FormControlLabel
+                    control={<Checkbox inputRef={dontCallMeRef} onChange={onChangeDontCallMe}
+                    />} label="Don't call me" />
+                <TextField
+                    inputRef={commentRef}
+                    id="outlined-multiline-static"
+                    label="Comment"
+                    multiline
+                    rows={4}
+                    placeholder="Write your point..."
+                    value={comment}
+                    onChange={onChangeComment}
+                />
+                <div style={{display: "flex", justifyContent:"center", marginTop: "20px"}}>
+                    <Button type="submit">Continue</Button>
+                    <Button onClick={handleActiveCartPage} >Cancel</Button>
+                </div>
+            </form>
         </div>
         :
         isOrderMade
