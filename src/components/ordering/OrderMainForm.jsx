@@ -36,6 +36,8 @@ const OrderMainForm = memo(props => {
     const [dontCallMe, setDontCallMe] = useState(false)
     const [comment, setComment] = useState("")
 
+    const [formFieldsProps, setFormFieldsProps] = useState(null)
+
     const onChangeFirstName = ({target}) => {
         setFirstName(target.value)
     }
@@ -106,20 +108,21 @@ const OrderMainForm = memo(props => {
     const onSubmitOrderForm = (e) => {
         e.preventDefault()
 
-        // if (!firstNameRef.current?.value.trim()
-        //     ||
-        //     !lastNameRef.current?.value.trim()
-        //     ||
-        //     !countryRef.current?.value.trim()
-        //     ||
-        //     !cityRef.current?.value.trim()
-        //     ||
-        //     !mainAddressRef.current?.value.trim()
-        //     ||
-        //     !emailRef.current?.value.trim()
-        //     ||
-        //     !deliveryTypeRef.current?.value
-        // ) throw new Error("Empty input")
+        // uncontrolled inputs
+        if (!firstNameRef.current?.value.trim()
+            ||
+            !lastNameRef.current?.value.trim()
+            ||
+            !countryRef.current?.value.trim()
+            ||
+            !cityRef.current?.value.trim()
+            ||
+            !mainAddressRef.current?.value.trim()
+            ||
+            !emailRef.current?.value.trim()
+            ||
+            !deliveryTypeRef.current?.value
+        ) throw new Error("Empty input")
 
         if (isNaN(+phoneRef.current.value)) throw new Error("Incorrect phone number")
         if (!emailRef.current.value.includes("@")) throw new Error("Incorrect email")
@@ -130,12 +133,6 @@ const OrderMainForm = memo(props => {
         const cityValue = cityRef.current.value.charAt(0).toUpperCase() + cityRef.current.value.slice(1)
         const mainAddressValue = mainAddressRef.current.value.charAt(0).toUpperCase() + mainAddressRef.current.value.slice(1)
         const additionalAddressValue = additionalAddressRef.current.value.charAt(0).toUpperCase() + additionalAddressRef.current.value.slice(1)
-
-        // firstNameRef.current.value = firstNameRef.current.value.charAt(0).toUpperCase() + firstNameRef.current.value.slice(1)
-        // lastNameRef.current.value = lastNameRef.current.value.charAt(0).toUpperCase() + lastNameRef.current.value.slice(1)
-        // cityRef.current.value = cityRef.current.value.charAt(0).toUpperCase() + cityRef.current.value.slice(1)
-        // mainAddressRef.current.value = mainAddressRef.current.value.charAt(0).toUpperCase() + mainAddressRef.current.value.slice(1)
-        // additionalAddressRef.current.value = additionalAddressRef.current.value.charAt(0).toUpperCase() + additionalAddressRef.current.value.slice(1)
 
         const formFieldsValue = {
             firstName: firstNameValue,
@@ -153,13 +150,56 @@ const OrderMainForm = memo(props => {
 
         setFormFieldsValue(formFieldsValue)
 
+        ///////////////////////////////////////////////////////
+
+        // controlled inputs
+
+        if (!firstName.trim()
+            ||
+            !lastName.trim()
+            ||
+            !country.trim()
+            ||
+            !city.trim()
+            ||
+            !mainAddress.trim()
+            ||
+            !email.trim()
+            ||
+            !delivery.trim()
+        ) throw new Error("Empty input")
+
+        if (isNaN(+phone)) throw new Error("Incorrect phone number")
+        if (!email.includes("@")) throw new Error("Incorrect email")
+        if (comment.length > 500) throw new Error("Much symbols in commentary")
+
+        const firstNameProp = firstName.charAt(0).toUpperCase() + firstName.slice(1)
+        const lastNameProp = lastName.charAt(0).toUpperCase() + lastName.slice(1)
+        const cityProp = city.charAt(0).toUpperCase() + city.slice(1)
+        const mainAddressProp = mainAddress.charAt(0).toUpperCase() + mainAddress.slice(1)
+        const additionalAddressProp = additionalAddress.charAt(0).toUpperCase() + additionalAddress.slice(1)
+
+        const formFieldsProps = {
+            firstName: firstNameProp,
+            lasName: lastNameProp,
+            country: country,
+            phone: phone,
+            city: cityProp,
+            mainAddress: mainAddressProp,
+            additionalAddress: additionalAddressProp,
+            email: email,
+            deliveryType: delivery,
+            dontCallMe: dontCallMe,
+            comment: comment,
+        }
+
+        setFormFieldsProps(formFieldsProps)
+
+        ////////////////////////////////////////////////////////
+
         setIsOrderMade(!isOrderMade)
 
         store.dispatch(setOrderId())
-    }
-
-    const styled = {
-        marginBottom: "20px"
     }
 
     return (
@@ -349,6 +389,7 @@ const OrderMainForm = memo(props => {
                         label="First Name"
                         value={firstName}
                         onChange={onChangeFirstName}
+                        sx={{marginRight:"20px"}}
                     />
                     <TextField
                         required
@@ -368,6 +409,7 @@ const OrderMainForm = memo(props => {
                         label="Phone"
                         value={phone}
                         onChange={onChangePhone}
+                        sx={{marginRight:"20px"}}
                     />
                     <TextField
                         required
@@ -390,6 +432,7 @@ const OrderMainForm = memo(props => {
                         value={country}
                         label="Country"
                         onChange={onChangeCountry}
+                        sx={{marginRight:"20px"}}
                     >
                         <MenuItem value={"Ukraine"}>Ukraine</MenuItem>
                         <MenuItem value={"Finland"}>Finland</MenuItem>
@@ -402,6 +445,7 @@ const OrderMainForm = memo(props => {
                         label="City"
                         value={city}
                         onChange={onChangeCity}
+                        sx={{marginRight:"20px"}}
                     />
                     <TextField
                         required
@@ -410,6 +454,7 @@ const OrderMainForm = memo(props => {
                         label="Main Address"
                         value={mainAddress}
                         onChange={onChangeMainAddress}
+                        sx={{marginRight:"20px"}}
                     />
                     <TextField
                         inputRef={additionalAddressRef}
@@ -419,9 +464,8 @@ const OrderMainForm = memo(props => {
                         onChange={onChangeAdditionalAddress}
                     />
                 </div>
-                <FormLabel id="demo-radio-buttons-group-label">Delivery</FormLabel>
+                <p>Delivery</p>
                 <RadioGroup
-                    // inputRef={deliveryTypeRef}
                     aria-labelledby="demo-radio-buttons-group-label"
                     defaultValue="postalService"
                     name="radio-buttons-group"
@@ -466,6 +510,7 @@ const OrderMainForm = memo(props => {
             cartList={cartList}
             totalSum={totalSum}
             formFieldsValue={formFieldsValue}
+            formFieldsProps={formFieldsProps}
         />
         :
         isActiveCartPage

@@ -11,13 +11,13 @@ const ProductList = memo((props => {
     return (
         <div>
             <h2
-                style={{marginLeft: "25px"}}
+                style={{marginLeft: "50px"}}
             >Founded: {products.length} of {allProductsAmount}</h2>
             <div style={{
                 display: "grid",
                 gap: "10px",
-                gridTemplateColumns: "1fr 1fr 1fr 1fr",
-                margin: "0 25px"
+                gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+                margin: "0 50px"
             }}>
                 {products.map(product => {
                     return <ProductListItem

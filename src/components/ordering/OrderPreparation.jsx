@@ -8,10 +8,11 @@ const OrderPreparation = memo(props => {
     const {
         cartList,
         totalSum,
-        formFieldsValue
+        formFieldsValue,
+        formFieldsProps
     } = props
 
-    console.log(cartList, totalSum, formFieldsValue)
+    console.log(cartList, totalSum, formFieldsValue, formFieldsProps)
 
     const products = useSelector(state => state.products)
     const formFieldsEntries = Object.entries(formFieldsValue)
@@ -30,15 +31,14 @@ const OrderPreparation = memo(props => {
         setIsActiveFormPage(!isActiveFormPage)
     }, [])
 
-    console.log(products, cartList)
-
     return(
         !isActiveFormPage && !isActiveFinalOrderPage
         ?
         <div style={{display: "flex"}}>
             <div style={{
-                padding: "0 150px",
+                padding: "0 5%",
                 margin:"3%",
+                width: "60%",
             }}>
                 <Typography variant="h4" component="p">Your order:</Typography>
             {
@@ -85,6 +85,7 @@ const OrderPreparation = memo(props => {
                 display:"flex",
                 flexDirection:"column",
                 marginTop: "3%",
+                width:"40%"
                 }}
             >
                 <Typography variant="h4" component="p">Contact information</Typography>
@@ -94,7 +95,7 @@ const OrderPreparation = memo(props => {
                     {
                         formFieldsEntries.map(formValue => {
                             return <Typography
-                                variant="h6"
+                                variant="subtitle1"
                                 component="p"
                                 key={formValue[0]}>
                                 {formValue[0] + ": " + formValue[1]}
@@ -102,7 +103,7 @@ const OrderPreparation = memo(props => {
                         })
                     }
                 </div>
-                <Typography variant="h6" component="p">totalSum: {totalSum}$</Typography>
+                <Typography variant="subtitle1" component="p">totalSum: {totalSum}$</Typography>
                 <div>
                     <Button onClick={handleIsActiveFormPage}>Edit Order</Button>
                     <Button onClick={handleFinalOrderPage}>Make Order</Button>

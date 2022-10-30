@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import {Box, Card, CardMedia, CardContent, Typography, Button, CardActions} from "@mui/material";
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
+import FiberNewSharpIcon from '@mui/icons-material/FiberNewSharp';
+import SellIcon from '@mui/icons-material/Sell';
+import Rating from '@mui/material/Rating';
 
 const ProductListItem = memo((props => {
     const {
@@ -45,17 +48,26 @@ const ProductListItem = memo((props => {
                         {title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {"Novelty: " + isNew}
+                        {/*{"Novelty: " + isNew}*/}
+                        {
+                            isNew
+                            ?
+                            <FiberNewSharpIcon color="success" fontSize="large" sx={{marginRight: "10px"}}/>
+                            :
+                            null
+                        }
+                        {
+                            isSale
+                            ?
+                            <SellIcon color="warning" fontSize="large" />
+                            :
+                            null
+                        }
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        {"On sales: " + isSale}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography sx={{margin: "10px 0"}} variant="body1" color="text.secondary">
                         {`${"Price: " + price + "$"}`}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        {"Rating: " + rating}
-                    </Typography>
+                    <Rating name="read-only" value={rating / 20} precision={0.5} readOnly />
                 </CardContent>
                 <CardActions>
                     <Button size="small" onClick={onClickCartProductsValue}>

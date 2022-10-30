@@ -1,78 +1,16 @@
 import {memo} from "react";
-// import CatalogPage from "./catalogue/CatalogPage";
-// import CartPage from "./cart/CartPage";
-import {Typography} from "@mui/material";
-// import {NavLink, Route, Routes} from "react-router-dom";
-// import ItemPage from "./catalogue/ItemPage";
-// import {Provider} from "react-redux";
-// import {cart} from "./Stores/ReduxStore";
-// import MainMenu from "./MainMenu";
-// import RouterNavigation from "./Routes/RouterNavigation";
-// import OrderMainForm from "./ordering/OrderMainForm";
-// import DeliveryInfoPage from "./delivery/DeliveryInfoPage";
-// import AboutUsInfoPage from "./about/AboutUsInfoPage";
+import {Button, Paper, Typography, Box} from "@mui/material";
+import {NavLink} from "react-router-dom";
+import BextorLogo from "../assets/images/BextorLogo.png"
 
 const mainMenu = memo((props) => {
     return (
-        <div className="wrapper">
-            {/*<header>*/}
-            {/*    <nav>*/}
-            {/*        <Button LinkComponent={NavLink} to="/" ><img src="" alt="Nice logo" /></Button>*/}
-            {/*        <Button LinkComponent={NavLink} to="/catalog" >Catalog</Button>*/}
-            {/*        <Button LinkComponent={NavLink} to="/about" >About us</Button>*/}
-            {/*        <Button LinkComponent={NavLink} to="/delivery" >Delivery</Button>*/}
-            {/*        <Button LinkComponent={NavLink} to="/cart" >Cart</Button>*/}
-            {/*    </nav>*/}
-            {/*</header>*/}
-            <main>
-                {/*<Routes>*/}
-                {/*    <Route*/}
-                {/*        path="/catalog"*/}
-                {/*        element={*/}
-                {/*            <Provider store={cart}>*/}
-                {/*                <CatalogPage />*/}
-                {/*            </Provider>*/}
-                {/*        }*/}
-                {/*    />*/}
-                {/*    <Route*/}
-                {/*        path="/product/:id"*/}
-                {/*        element={*/}
-                {/*            <Provider store={cart}>*/}
-                {/*                <ItemPage />*/}
-                {/*            </Provider>*/}
-                {/*        }*/}
-                {/*    />*/}
-                {/*    <Route*/}
-                {/*        path="/cart"*/}
-                {/*        element={*/}
-                {/*            <Provider store={cart}>*/}
-                {/*                <CartPage/>*/}
-                {/*            </Provider>*/}
-                {/*        }*/}
-                {/*    />*/}
-                {/*    <Route*/}
-                {/*        path="/delivery"*/}
-                {/*        element={*/}
-                {/*            <Provider store={cart}>*/}
-                {/*                <DeliveryInfoPage />*/}
-                {/*            </Provider>*/}
-                {/*        }*/}
-                {/*    />*/}
-                {/*    <Route*/}
-                {/*        path="/about"*/}
-                {/*        element={*/}
-                {/*            <Provider store={cart}>*/}
-                {/*                <AboutUsInfoPage />*/}
-                {/*            </Provider>*/}
-                {/*        }*/}
-                {/*    />*/}
-                {/*</Routes>*/}
-            </main>
-            <footer>
-                <Typography variant="h6" component="h6">
-                    All rights reserved 2022 @Ingenious.inc
-                </Typography>
-            </footer>
+        <div style={{display: "flex", flexDirection:"column", margin: "3% 5%", padding: "0 170px"}}>
+            <Typography variant="h3" component="h3" sx={{marginBottom:"50px"}}>Welcome to Bextor store</Typography>
+            <Box sx={{marginBottom:"50px"}}><img style={{width: "50%"}} src={BextorLogo} /></Box>
+            <Typography variant="h5" component="p" >"Bextor" is a highly visible and recognizable retail store in the Ukrainian market, which includes a network of more than 29 stores and the online store.</Typography>
+            <Typography variant="h5" component="p" >Online store is confidently among the leaders of online trade in Ukraine.</Typography>
+
         </div>
     )
 })
