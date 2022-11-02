@@ -15,7 +15,8 @@ const OrderPreparation = memo(props => {
     console.log(cartList, totalSum, formFieldsValue, formFieldsProps)
 
     const products = useSelector(state => state.products)
-    const formFieldsEntries = Object.entries(formFieldsValue)
+    const formFieldsEntries = Object.entries(formFieldsProps)
+    // const formFieldsEntries = Object.entries(formFieldsValue)
     const [isActiveFinalOrderPage, setIsActiveFinalOrderPage] = useState(false)
     const [isActiveFormPage, setIsActiveFormPage] = useState(false)
     const dispatch = useDispatch()

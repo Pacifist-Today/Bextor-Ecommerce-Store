@@ -81,24 +81,24 @@ const OrderMainForm = memo(props => {
 
     console.log(firstName, lastName, country, phone, city, mainAddress, additionalAddress, email, delivery, dontCallMe, comment)
 
-    /////////////////////////////////////////////////////////////////////////////
-    // Uncontrolled inputs
-
     const handleActiveCartPage = useCallback(() => {
         setIsActiveCartPage(!isActiveCartPage)
     }, [])
 
-    const firstNameRef = useRef(null)
-    const lastNameRef = useRef(null)
-    const countryRef = useRef(null)
-    const phoneRef = useRef(null)
-    const cityRef = useRef(null)
-    const mainAddressRef = useRef(null)
-    const additionalAddressRef = useRef(null)
-    const emailRef = useRef(null)
-    const deliveryTypeRef = useRef(null)
-    const dontCallMeRef = useRef(null)
-    const commentRef = useRef(null)
+    /////////////////////////////////////////////////////////////////////////////
+    // Uncontrolled inputs
+
+    // const firstNameRef = useRef(null)
+    // const lastNameRef = useRef(null)
+    // const countryRef = useRef(null)
+    // const phoneRef = useRef(null)
+    // const cityRef = useRef(null)
+    // const mainAddressRef = useRef(null)
+    // const additionalAddressRef = useRef(null)
+    // const emailRef = useRef(null)
+    // const deliveryTypeRef = useRef(null)
+    // const dontCallMeRef = useRef(null)
+    // const commentRef = useRef(null)
 
     const [formFieldsValue, setFormFieldsValue] = useState(null)
 
@@ -106,46 +106,46 @@ const OrderMainForm = memo(props => {
         e.preventDefault()
 
         // uncontrolled inputs
-        if (!firstNameRef.current?.value.trim()
-            ||
-            !lastNameRef.current?.value.trim()
-            ||
-            !countryRef.current?.value.trim()
-            ||
-            !cityRef.current?.value.trim()
-            ||
-            !mainAddressRef.current?.value.trim()
-            ||
-            !emailRef.current?.value.trim()
-            ||
-            !deliveryTypeRef.current?.value
-        ) throw new Error("Empty input")
-
-        if (isNaN(+phoneRef.current.value)) throw new Error("Incorrect phone number")
-        if (!emailRef.current.value.includes("@")) throw new Error("Incorrect email")
-        if (commentRef.current.value.trim().length > 500) throw new Error("Much symbols in commentary")
-
-        const firstNameValue = firstNameRef.current.value.charAt(0).toUpperCase() + firstNameRef.current.value.slice(1)
-        const lastNameValue = lastNameRef.current.value.charAt(0).toUpperCase() + lastNameRef.current.value.slice(1)
-        const cityValue = cityRef.current.value.charAt(0).toUpperCase() + cityRef.current.value.slice(1)
-        const mainAddressValue = mainAddressRef.current.value.charAt(0).toUpperCase() + mainAddressRef.current.value.slice(1)
-        const additionalAddressValue = additionalAddressRef.current.value.charAt(0).toUpperCase() + additionalAddressRef.current.value.slice(1)
-
-        const formFieldsValue = {
-            firstName: firstNameValue,
-            lasName: lastNameValue,
-            country: countryRef.current.value,
-            phone: phoneRef.current.value,
-            city: cityValue,
-            mainAddress: mainAddressValue,
-            additionalAddress: additionalAddressValue,
-            email: emailRef.current.value,
-            deliveryType: deliveryTypeRef.current.value,
-            dontCallMe: dontCallMeRef.current.checked,
-            comment: commentRef.current.value,
-        }
-
-        setFormFieldsValue(formFieldsValue)
+        // if (!firstNameRef.current?.value.trim()
+        //     ||
+        //     !lastNameRef.current?.value.trim()
+        //     ||
+        //     !countryRef.current?.value.trim()
+        //     ||
+        //     !cityRef.current?.value.trim()
+        //     ||
+        //     !mainAddressRef.current?.value.trim()
+        //     ||
+        //     !emailRef.current?.value.trim()
+        //     ||
+        //     !deliveryTypeRef.current?.value
+        // ) throw new Error("Empty input")
+        //
+        // if (isNaN(+phoneRef.current.value)) throw new Error("Incorrect phone number")
+        // if (!emailRef.current.value.includes("@")) throw new Error("Incorrect email")
+        // if (commentRef.current.value.trim().length > 500) throw new Error("Much symbols in commentary")
+        //
+        // const firstNameValue = firstNameRef.current.value.charAt(0).toUpperCase() + firstNameRef.current.value.slice(1)
+        // const lastNameValue = lastNameRef.current.value.charAt(0).toUpperCase() + lastNameRef.current.value.slice(1)
+        // const cityValue = cityRef.current.value.charAt(0).toUpperCase() + cityRef.current.value.slice(1)
+        // const mainAddressValue = mainAddressRef.current.value.charAt(0).toUpperCase() + mainAddressRef.current.value.slice(1)
+        // const additionalAddressValue = additionalAddressRef.current.value.charAt(0).toUpperCase() + additionalAddressRef.current.value.slice(1)
+        //
+        // const formFieldsValue = {
+        //     firstName: firstNameValue,
+        //     lasName: lastNameValue,
+        //     country: countryRef.current.value,
+        //     phone: phoneRef.current.value,
+        //     city: cityValue,
+        //     mainAddress: mainAddressValue,
+        //     additionalAddress: additionalAddressValue,
+        //     email: emailRef.current.value,
+        //     deliveryType: deliveryTypeRef.current.value,
+        //     dontCallMe: dontCallMeRef.current.checked,
+        //     comment: commentRef.current.value,
+        // }
+        //
+        // setFormFieldsValue(formFieldsValue)
 
         ///////////////////////////////////////////////////////
 
@@ -203,171 +203,7 @@ const OrderMainForm = memo(props => {
         !isOrderMade && !isActiveCartPage
         ?
         <div style={{display: "flex", justifyContent:"center"}}>
-            {/*<form*/}
-            {/*    onSubmit={onSubmitOrderForm}*/}
-            {/*    style={{*/}
-            {/*        display: "flex",*/}
-            {/*        flexDirection: "column",*/}
-            {/*        marginTop: "3%"*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    <span>*/}
-            {/*        <label htmlFor="firstName">First name </label>*/}
-            {/*        <input*/}
-            {/*            name="firstName"*/}
-            {/*            ref={firstNameRef}*/}
-            {/*            type="text"*/}
-            {/*            placeholder="First Name"*/}
-            {/*            /////////////////////////// controlled input*/}
-            {/*            value={firstName}*/}
-            {/*            onChange={onChangeFirstName}*/}
-            {/*            /////////////////////////////*/}
-            {/*            required*/}
-            {/*        />*/}
-            {/*    </span>*/}
-            {/*    <span>*/}
-            {/*        <label htmlFor="lastName">Last name </label>*/}
-            {/*        <input*/}
-            {/*            name="lastName"*/}
-            {/*            ref={lastNameRef}*/}
-            {/*            type="text"*/}
-            {/*            placeholder="Last Name"*/}
-            {/*            /////////////////////////// controlled input*/}
-            {/*            value={lastName}*/}
-            {/*            onChange={onChangeLastName}*/}
-            {/*            /////////////////////////////*/}
-            {/*            required*/}
-            {/*        />*/}
-            {/*    </span>*/}
-            {/*    <span>*/}
-            {/*        <span>Choose your country </span>*/}
-            {/*        <select*/}
-            {/*            ref={countryRef}*/}
-            {/*            // defaultValue="Ukraine"*/}
-            {/*            /////////////////////////// controlled input*/}
-            {/*            onChange={onChangeCountry}*/}
-            {/*            value="Ukraine"*/}
-            {/*            /////////////////////////////*/}
-            {/*        >*/}
-            {/*            <option value="Ukraine">Ukraine</option>*/}
-            {/*            <option value="Finland">Finland</option>*/}
-            {/*            <option value="Dutch">Dutch</option>*/}
-            {/*        </select>*/}
-            {/*    </span>*/}
-            {/*    <span>*/}
-            {/*        <label htmlFor="phone">Phone </label>*/}
-            {/*        <input*/}
-            {/*            name="phone"*/}
-            {/*            ref={phoneRef}*/}
-            {/*            type="tel"*/}
-            {/*            placeholder="Phone number"*/}
-            {/*            /////////////////////////// controlled input*/}
-            {/*            onChange={onChangePhone}*/}
-            {/*            value={phone}*/}
-            {/*            /////////////////////////////*/}
-            {/*            required*/}
-            {/*        />*/}
-            {/*    </span>*/}
-            {/*    <span>*/}
-            {/*        <label htmlFor="city">City </label>*/}
-            {/*        <input*/}
-            {/*            name="city"*/}
-            {/*            ref={cityRef}*/}
-            {/*            type="text"*/}
-            {/*            placeholder="City"*/}
-            {/*            /////////////////////////// controlled input*/}
-            {/*            onChange={onChangeCity}*/}
-            {/*            value={city}*/}
-            {/*            /////////////////////////////*/}
-            {/*            required*/}
-            {/*        />*/}
-            {/*    </span>*/}
-            {/*    <span>*/}
-            {/*        <label htmlFor="mainAddress">Main address </label>*/}
-            {/*        <input*/}
-            {/*            name="mainAddress"*/}
-            {/*            ref={mainAddressRef}*/}
-            {/*            type="text"*/}
-            {/*            placeholder="Main address"*/}
-            {/*            /////////////////////////// controlled input*/}
-            {/*            onChange={onChangeMainAddress}*/}
-            {/*            value={mainAddress}*/}
-            {/*            /////////////////////////////*/}
-            {/*            required*/}
-            {/*        />*/}
-            {/*    </span>*/}
-            {/*    <span>*/}
-            {/*        <label htmlFor="additionalAddress">Additional address </label>*/}
-            {/*        <input*/}
-            {/*            name="additionalAddress"*/}
-            {/*            ref={additionalAddressRef}*/}
-            {/*            type="text"*/}
-            {/*            /////////////////////////// controlled input*/}
-            {/*            onChange={onChangeAdditionalAddress}*/}
-            {/*            value={additionalAddress}*/}
-            {/*            /////////////////////////////*/}
-            {/*            placeholder="Additional address"*/}
-            {/*        />*/}
-            {/*    </span>*/}
-            {/*    <span>*/}
-            {/*        <label htmlFor="email">Email </label>*/}
-            {/*        <input*/}
-            {/*            name="email"*/}
-            {/*            ref={emailRef}*/}
-            {/*            type="email"*/}
-            {/*            placeholder="Email"*/}
-            {/*            /////////////////////////// controlled input*/}
-            {/*            onChange={onChangeEmail}*/}
-            {/*            value={email}*/}
-            {/*            /////////////////////////////*/}
-            {/*            required*/}
-            {/*        />*/}
-            {/*    </span>*/}
-            {/*    <span>*/}
-            {/*        <label htmlFor="postalService">Postal service </label>*/}
-            {/*        <input*/}
-            {/*            ref={deliveryTypeRef}*/}
-            {/*            name="deliveryService"*/}
-            {/*            value="postalService"*/}
-            {/*            /////////////////////////// controlled input*/}
-            {/*            onChange={onChangeDelivery}*/}
-            {/*            /////////////////////////////*/}
-            {/*            type="radio"*/}
-            {/*            defaultChecked="true"*/}
-            {/*        />*/}
-            {/*        <label htmlFor="pickup">Pickup </label>*/}
-            {/*        <input*/}
-            {/*            ref={deliveryTypeRef}*/}
-            {/*            name="deliveryService"*/}
-            {/*            value="pickup"*/}
-            {/*            /////////////////////////// controlled input*/}
-            {/*            onChange={onChangeDelivery}*/}
-            {/*            /////////////////////////////*/}
-            {/*            type="radio"*/}
-            {/*        />*/}
-            {/*    </span>*/}
-            {/*    <span>*/}
-            {/*        <label htmlFor="dontCallMe">Don't recall </label>*/}
-            {/*        <input*/}
-            {/*            ref={dontCallMeRef}*/}
-            {/*            name="dontCallMe"*/}
-            {/*            type="checkbox"*/}
-            {/*            /////////////////////////// controlled input*/}
-            {/*            onChange={onChangeDontCallMe}*/}
-            {/*            /////////////////////////////*/}
-            {/*        />*/}
-            {/*    </span>*/}
-            {/*    <textarea*/}
-            {/*        ref={commentRef}*/}
-            {/*        placeholder="Share your opinion"*/}
-            {/*        /////////////////////////// controlled input*/}
-            {/*        onChange={onChangeComment}*/}
-            {/*        value={comment}*/}
-            {/*        /////////////////////////////*/}
-            {/*    />*/}
-            {/*    <button type="submit">Continue</button>*/}
-            {/*    <Button onClick={handleActiveCartPage} >Cancel</Button>*/}
-            {/*</form>*/}
+
 
             <form onSubmit={onSubmitOrderForm} style={{
                 display: "flex",
@@ -381,7 +217,7 @@ const OrderMainForm = memo(props => {
                 <div style={{display: "flex"}}>
                     <TextField
                         required
-                        inputRef={firstNameRef}
+                        // inputRef={firstNameRef}
                         id="outlined-required"
                         label="First Name"
                         value={firstName}
@@ -390,7 +226,7 @@ const OrderMainForm = memo(props => {
                     />
                     <TextField
                         required
-                        inputRef={lastNameRef}
+                        // inputRef={lastNameRef}
                         id="outlined-required"
                         label="Last Name"
                         value={lastName}
@@ -401,7 +237,7 @@ const OrderMainForm = memo(props => {
                 <div style={{display:"flex", }}>
                     <TextField
                         required
-                        inputRef={phoneRef}
+                        // inputRef={phoneRef}
                         id="outlined-required"
                         label="Phone"
                         value={phone}
@@ -410,7 +246,7 @@ const OrderMainForm = memo(props => {
                     />
                     <TextField
                         required
-                        inputRef={emailRef}
+                        // inputRef={emailRef}
                         id="outlined-required"
                         label="Email"
                         type="email"
@@ -424,7 +260,7 @@ const OrderMainForm = memo(props => {
                     {/*<p>Country</p>*/}
                     <Select
                         labelId="demo-simple-select-label"
-                        inputRef={countryRef}
+                        // inputRef={countryRef}
                         id="demo-simple-select"
                         value={country}
                         label="Country"
@@ -437,7 +273,7 @@ const OrderMainForm = memo(props => {
                     </Select>
                     <TextField
                         required
-                        inputRef={cityRef}
+                        // inputRef={cityRef}
                         id="outlined-required"
                         label="City"
                         value={city}
@@ -446,7 +282,7 @@ const OrderMainForm = memo(props => {
                     />
                     <TextField
                         required
-                        inputRef={mainAddressRef}
+                        // inputRef={mainAddressRef}
                         id="outlined-required"
                         label="Main Address"
                         value={mainAddress}
@@ -454,7 +290,7 @@ const OrderMainForm = memo(props => {
                         sx={{marginRight:"20px"}}
                     />
                     <TextField
-                        inputRef={additionalAddressRef}
+                        // inputRef={additionalAddressRef}
                         id="outlined-required"
                         label="Additional Address"
                         value={additionalAddress}
@@ -470,22 +306,28 @@ const OrderMainForm = memo(props => {
                 >
                     <FormControlLabel
                         value="postalService"
-                        control={<Radio inputRef={deliveryTypeRef} />}
+                        control={<Radio
+                            // inputRef={deliveryTypeRef}
+                        />}
                         label="Postal service"
                         onChange={onChangeDelivery}
                     />
                     <FormControlLabel
                         value="pickUp"
-                        control={<Radio inputRef={deliveryTypeRef} />}
+                        control={<Radio
+                            // inputRef={deliveryTypeRef}
+                        />}
                         label="Pickup"
                         onChange={onChangeDelivery}
                     />
                 </RadioGroup>
                 <FormControlLabel
-                    control={<Checkbox inputRef={dontCallMeRef} onChange={onChangeDontCallMe}
+                    control={<Checkbox
+                        // inputRef={dontCallMeRef}
+                        onChange={onChangeDontCallMe}
                     />} label="Don't call me" />
                 <TextField
-                    inputRef={commentRef}
+                    // inputRef={commentRef}
                     id="outlined-multiline-static"
                     label="Comment"
                     multiline
