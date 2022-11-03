@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { setCategoriesList } from './ducks/Categories-duck'
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 export function useCategories() {
     const categories = useSelector(state => state.products)

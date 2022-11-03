@@ -45,13 +45,13 @@ const CartPage = memo(() => {
     return (
         !isActiveOrdering
         ?
-        <div
-            style={{
+        <Box
+            sx={{
                 width:"100%",
                 display: "flex"
             }}
         >
-            <div style={{
+            <Box sx={{
                 width:"80%",
                 display:"flex",
                 flexDirection: "column",
@@ -66,12 +66,12 @@ const CartPage = memo(() => {
                                 return (
                                     <Card
                                         key={product.id}
-                                        style={{
+                                        sx={{
                                             margin: "1% 10%",
                                             display: "flex",
                                         }}
                                     >
-                                        <div style={{width:"30%"}}>
+                                        <Box sx={{width:"30%"}}>
                                             <img
                                                 alt="product"
                                                 src={`${product.photo}?v=${product.id}`}
@@ -80,8 +80,8 @@ const CartPage = memo(() => {
                                                     padding: "5%"
                                                 }}
                                             />
-                                        </div>
-                                        <div style={{
+                                        </Box>
+                                        <Box sx={{
                                             marginLeft: "50px",
                                             display: "flex",
                                             width: "100%",
@@ -110,7 +110,7 @@ const CartPage = memo(() => {
                                             <Box style={{alignSelf: "flex-end", padding:"0 30px 30px 0"}}>
                                                 <Button data-productcartid={cartItem[0]} onClick={onClickSetProductInCart}>Delete</Button>
                                             </Box>
-                                        </div>
+                                        </Box>
                                     </Card>
                                 )
                             }
@@ -143,12 +143,11 @@ const CartPage = memo(() => {
                                 </Typography>
                             </Button>
                         </Typography>
-
                     </div>
                 :
                     null
                 }
-            </div>
+            </Box>
             <Card style={{
                 display: "flex",
                 flexDirection: "column",
@@ -159,13 +158,13 @@ const CartPage = memo(() => {
                 height: "max-content",
                 textAlign: "center"
             }}>
-                <div >
+                <div>
                     <p>Total sum: {totalSum}$</p>
                     <p>Products quantity: {productsQuantity}</p>
                 </div>
                 <Button onClick={handleActiveOrderingForm}>Make order</Button>
             </Card>
-        </div>
+        </Box>
         :
         isActiveOrdering
         ?

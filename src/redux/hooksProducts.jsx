@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { setProductsList } from './ducks/Product-duck'
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 export function useProducts() {
     const products = useSelector(state => state.products)

@@ -1,8 +1,8 @@
 import React, {memo, useCallback} from 'react';
 import PropTypes from "prop-types";
-import {Box, Card, CardMedia, CardContent, Typography, Button, CardActions} from "@mui/material";
+import {Card, CardMedia, CardContent, Typography, Button, CardActions, Grid} from "@mui/material";
 import {Link} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import FiberNewSharpIcon from '@mui/icons-material/FiberNewSharp';
 import SellIcon from '@mui/icons-material/Sell';
 import Rating from '@mui/material/Rating';
@@ -30,12 +30,11 @@ const ProductListItem = memo((props => {
     }, [])
 
     const cartProducts = useSelector((state) => {
-        // state.cartProducts
         return state.cartList
     })
 
     return (
-        <Box>
+        <Grid item xs={3}>
             <Card>
                 <CardMedia
                     component="img"
@@ -48,7 +47,6 @@ const ProductListItem = memo((props => {
                         {title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {/*{"Novelty: " + isNew}*/}
                         {
                             isNew
                             ?
@@ -76,7 +74,7 @@ const ProductListItem = memo((props => {
                     <Button to={`/product/${id}`} LinkComponent={Link} size="small">Learn More</Button>
                 </CardActions>
             </Card>
-        </Box>
+        </Grid>
     );
 }))
 

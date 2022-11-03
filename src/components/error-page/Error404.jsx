@@ -1,8 +1,8 @@
-import {Typography} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 
 const Error404 = () => {
     return (
-        <div>
+        <Box>
             <Typography
                 variant="h1"
                 component="p"
@@ -19,7 +19,7 @@ const Error404 = () => {
                     textAlign:"center",
                 }}
             >Page not found</Typography>
-        </div>
+        </Box>
     )
 }
 

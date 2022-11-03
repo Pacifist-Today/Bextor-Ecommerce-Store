@@ -1,6 +1,6 @@
-import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {memo, useCallback, useState} from 'react';
 import PropTypes from "prop-types";
-import {Box, Switch, FormControlLabel, FormGroup, TextField, Slider, Button} from "@mui/material";
+import {Box, Switch, FormControlLabel, FormGroup, TextField, Slider, Button, Typography} from "@mui/material";
 
 const Filters = memo((props => {
     const {
@@ -73,7 +73,7 @@ const Filters = memo((props => {
                 <TextField id="standard-basic" label="I'm looking for..." variant="standard" onChange={onChangeTitle} />
             </div>
             <Box sx={{ width: "100%"}}>
-                <p>Filtering by price:</p>
+                <Typography variant="body1" component="p" sx={{margin:"15px 0"}}>Filtering by price:</Typography>
                 <Slider
                     value={priceRange}
                     min={lowestPrice}
@@ -83,7 +83,7 @@ const Filters = memo((props => {
                 />
             </Box>
             <Box sx={{ width: "100%" }}>
-                <p>Filtering by rating:</p>
+                <Typography variant="body1" component="p" sx={{margin:"15px 0"}}>Filtering by rating:</Typography>
                 <Slider
                     value={ratingRange}
                     min={lowestRating}
@@ -112,7 +112,7 @@ const Filters = memo((props => {
                     label="In stock"
                 />
             </FormGroup>
-            <p>Filtering by categories</p>
+            <Typography variant="body1" component="p" sx={{margin:"15px 0"}}>Filtering by categories</Typography>
             <Button onClick={onClickSelectAllCategories}>Select all</Button>
             {
                 categoryList.map(value => (

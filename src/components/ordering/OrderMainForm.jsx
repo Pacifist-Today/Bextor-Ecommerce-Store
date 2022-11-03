@@ -1,5 +1,5 @@
 import {memo, useCallback, useEffect, useRef, useState} from "react";
-import {Button, Paper, TextField, FormLabel, FormControlLabel, FormControl, Radio, RadioGroup, InputLabel, Select, MenuItem, Checkbox} from "@mui/material";
+import {Button, Paper, TextField, FormLabel, FormControlLabel, FormControl, Radio, RadioGroup, InputLabel, Select, MenuItem, Checkbox, Box} from "@mui/material";
 import {NavLink} from "react-router-dom";
 import OrderPreparation from "./OrderPreparation";
 import CartPage from "../cart/CartPage";
@@ -202,9 +202,7 @@ const OrderMainForm = memo(props => {
     return (
         !isOrderMade && !isActiveCartPage
         ?
-        <div style={{display: "flex", justifyContent:"center"}}>
-
-
+        <Box sx={{display: "flex", justifyContent:"center"}}>
             <form onSubmit={onSubmitOrderForm} style={{
                 display: "flex",
                 flexDirection: "column",
@@ -214,7 +212,7 @@ const OrderMainForm = memo(props => {
                 }}
             >
                 <p>Personal information</p>
-                <div style={{display: "flex"}}>
+                <Box sx={{display: "flex"}}>
                     <TextField
                         required
                         // inputRef={firstNameRef}
@@ -232,9 +230,9 @@ const OrderMainForm = memo(props => {
                         value={lastName}
                         onChange={onChangeLastName}
                     />
-                </div>
+                </Box>
                 <p>Contact information</p>
-                <div style={{display:"flex", }}>
+                <Box sx={{display:"flex"}}>
                     <TextField
                         required
                         // inputRef={phoneRef}
@@ -253,11 +251,9 @@ const OrderMainForm = memo(props => {
                         value={email}
                         onChange={onChangeEmail}
                     />
-                </div>
+                </Box>
                 <p>Address</p>
-                <div style={{display:"flex"}}>
-                    {/*<InputLabel id="demo-simple-select-label">Country</InputLabel>*/}
-                    {/*<p>Country</p>*/}
+                <Box sx={{display:"flex"}}>
                     <Select
                         labelId="demo-simple-select-label"
                         // inputRef={countryRef}
@@ -296,13 +292,13 @@ const OrderMainForm = memo(props => {
                         value={additionalAddress}
                         onChange={onChangeAdditionalAddress}
                     />
-                </div>
+                </Box>
                 <p>Delivery</p>
                 <RadioGroup
                     aria-labelledby="demo-radio-buttons-group-label"
                     defaultValue="postalService"
                     name="radio-buttons-group"
-                    style={{display: "flex", flexDirection:"row"}}
+                    sx={{display: "flex", flexDirection:"row"}}
                 >
                     <FormControlLabel
                         value="postalService"
@@ -336,12 +332,12 @@ const OrderMainForm = memo(props => {
                     value={comment}
                     onChange={onChangeComment}
                 />
-                <div style={{display: "flex", justifyContent:"center", marginTop: "20px"}}>
+                <Box sx={{display: "flex", justifyContent:"center", marginTop: "20px"}}>
                     <Button type="submit">Continue</Button>
                     <Button onClick={handleActiveCartPage} >Cancel</Button>
-                </div>
+                </Box>
             </form>
-        </div>
+        </Box>
         :
         isOrderMade
         ?

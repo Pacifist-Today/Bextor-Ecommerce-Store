@@ -2,7 +2,7 @@ import {memo, useCallback, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import OrderMainForm from "./OrderMainForm";
 import FinalOrderPage from "./FinalOrderPage";
-import {Card, Typography, Button} from "@mui/material";
+import {Card, Typography, Button, Box} from "@mui/material";
 
 const OrderPreparation = memo(props => {
     const {
@@ -11,8 +11,6 @@ const OrderPreparation = memo(props => {
         formFieldsValue,
         formFieldsProps
     } = props
-
-    console.log(cartList, totalSum, formFieldsValue, formFieldsProps)
 
     const products = useSelector(state => state.products)
     const formFieldsEntries = Object.entries(formFieldsProps)
@@ -35,8 +33,8 @@ const OrderPreparation = memo(props => {
     return(
         !isActiveFormPage && !isActiveFinalOrderPage
         ?
-        <div style={{display: "flex"}}>
-            <div style={{
+        <Box sx={{display: "flex"}}>
+            <Box sx={{
                 padding: "0 5%",
                 margin:"3%",
                 width: "60%",
@@ -48,15 +46,14 @@ const OrderPreparation = memo(props => {
                         return (
                             <Card
                                 key={product.id}
-                                style={{
+                                sx={{
                                     display: "flex",
-                                    // width: "100%",
                                     marginTop: "3%",
                                     padding: "40px"
                                 }}
                             >
-                                <div
-                                    style={{
+                                <Box
+                                    sx={{
                                         width: "60%",
                                         marginRight: "",
                                     }}
@@ -68,21 +65,21 @@ const OrderPreparation = memo(props => {
                                             width:"50%"
                                         }}
                                     />
-                                </div>
-                                <div style={{width: "40%"}}>
+                                </Box>
+                                <Box sx={{width: "40%"}}>
                                     <Typography component="h6" variant="h5">{product.title}</Typography>
                                     <Typography component="p" variant="h6">Price: {product.price}$</Typography>
                                     <Typography component="p" variant="h6">Quantity: {cartList.get(product.id)}</Typography>
                                     <Typography component="p" variant="h6">Sum: {cartList.get(product.id) * product.price}$</Typography>
-                                </div>
+                                </Box>
                             </Card>
                         )
                     }
                     return null
                 })
             }
-            </div>
-            <div style={{
+            </Box>
+            <Box sx={{
                 display:"flex",
                 flexDirection:"column",
                 marginTop: "3%",
@@ -90,7 +87,7 @@ const OrderPreparation = memo(props => {
                 }}
             >
                 <Typography variant="h4" component="p">Contact information</Typography>
-                <div style={{
+                <Box sx={{
                     marginTop: "40px"
                 }}>
                     {
@@ -103,14 +100,14 @@ const OrderPreparation = memo(props => {
                                 </Typography>
                         })
                     }
-                </div>
+                </Box>
                 <Typography variant="subtitle1" component="p">totalSum: {totalSum}$</Typography>
                 <div>
                     <Button onClick={handleIsActiveFormPage}>Edit Order</Button>
                     <Button onClick={handleFinalOrderPage}>Make Order</Button>
                 </div>
-            </div>
-        </div>
+            </Box>
+        </Box>
         :
         isActiveFormPage
         ?

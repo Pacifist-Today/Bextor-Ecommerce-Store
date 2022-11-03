@@ -2,11 +2,10 @@ import PropTypes from "prop-types";
 import {memo} from "react";
 import {Box, Card, CardMedia, CardContent, Typography, Button} from "@mui/material";
 import {useParams} from "react-router";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 import {useCart} from "../../redux/hooksCart";
 import {useProducts} from "../../redux/hooksProducts";
-import {useCategories} from "../../redux/hooksCategories";
 
 const ItemPage = memo(() => {
     const { id } = useParams()
@@ -44,23 +43,23 @@ const ItemPage = memo(() => {
 
     return (
         <div>
-            <div
-                style={{
+            <Box
+                sx={{
                     display: "flex",
                     width: "100%",
                     padding: "0 10%",
                     margin: "30px auto"
             }}
             >
-                <div style={{width: "35%"}}>
+                <Box sx={{width: "35%"}}>
                     <img style={{width: "100%"}} src={ `${photo}?v=${id}` } alt="item photo" />
-                </div>
-                <div style={{
+                </Box>
+                <Box sx={{
                     width: "50%",
                     paddingLeft: "10%"
                     }}
                 >
-                    <Typography style={{marginBottom: "30px"}} variant="h3" component="h3">
+                    <Typography sx={{marginBottom: "30px"}} variant="h3" component="h3">
                         {title}
                     </Typography>
                     <Typography variant="h6" component="p">
@@ -87,20 +86,20 @@ const ItemPage = memo(() => {
                     <Typography variant="body1" component="p">
                         {"Description: " + description}
                     </Typography>
-                </div>
-            </div>
+                </Box>
+            </Box>
             <div>
                 <Typography
                     variant="h6"
                     component="p"
-                    style={{
+                    sx={{
                         marginLeft: "25px",
                         marginBottom: "10px",
                     }}
                 >
                     You also could be interested in:
                 </Typography>
-                <div style={{
+                <Box sx={{
                     display: "grid",
                     gap: "20px",
                     gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr",
@@ -116,7 +115,7 @@ const ItemPage = memo(() => {
                                 if (similarGoodsCounter < 6 && value.isInStock) {
                                     similarGoodsCounter++
                                     return (
-                                        <Box key={value.id} style={{}}>
+                                        <Box key={value.id}>
                                             <Card>
                                                 <Link to={`/product/${value.id}`}>
                                                     <CardMedia
@@ -146,7 +145,7 @@ const ItemPage = memo(() => {
                             })
                         })
                     }
-                </div>
+                </Box>
             </div>
         </div>
     )

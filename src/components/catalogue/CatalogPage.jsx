@@ -3,7 +3,7 @@ import Filters from "./Filters";
 import ProductList from "./ProductList";
 import { queryState } from "./Query-State";
 import { getProductsList, getCategoryList } from "./api";
-import {Card} from "@mui/material";
+import {Card, Grid} from "@mui/material";
 import {useCart} from "../../redux/hooksCart"
 import {useProducts} from "../../redux/hooksProducts";
 import {useCategories} from "../../redux/hooksCategories"
@@ -216,16 +216,9 @@ const CatalogPage = memo((props => {
     return (
         !isProductPageActive
             ?
-            <div style={{
-                display: "flex"
-            }}>
-                <div
-                    style={{
-                        width: "15%",
-                        // padding: "20px"
-                    }}
-                >
-                    <Card style={{
+            <Grid container>
+                <Grid item xs={2}>
+                    <Card sx={{
                         padding: "25px",
                         margin: "30px 15px"
                         }}
@@ -257,14 +250,12 @@ const CatalogPage = memo((props => {
                             handleIsInStockValue={handleIsInStockValue}
                         />
                     </Card>
-                </div>
-                <div
-                    style={{
-                        width: "85%"
-                    }}
+                </Grid>
+                <Grid
+                    item xs={10}
                 >
                     {isLoading && (
-                        <div>Loading...</div>
+                        <p>Loading...</p>
                     )}
                     {!isLoading && isSuccess && (
                         <ProductList
@@ -280,11 +271,10 @@ const CatalogPage = memo((props => {
                             {productsQueryError?.message || "Something went wrong"}
                         </div>
                     )}
-                </div>
-
-            </div>
+                </Grid>
+            </Grid>
                 :
-                null
+            null
     );
 }))
 

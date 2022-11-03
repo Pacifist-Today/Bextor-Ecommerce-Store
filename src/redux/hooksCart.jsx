@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { editItemCart, addItemCart, subItemCart, clearCart } from './ducks/Cart-duck'
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 export function useCart() {
     const cartList = useSelector(state => state.cartList)

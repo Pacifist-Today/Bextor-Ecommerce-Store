@@ -18,39 +18,19 @@ import CartPage from "./components/cart/CartPage";
 import DeliveryInfoPage from "./components/delivery/DeliveryInfoPage";
 import AboutUsInfoPage from "./components/about/AboutUsInfoPage";
 import CatalogPage from "./components/catalogue/CatalogPage";
-// import MainMenu from "./components/MainMenu";
 import MainMenu from "./components/MainMenu";
 import Error404 from "./components/error-page/Error404";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Badge from '@mui/material/Badge';
-import { styled } from '@mui/material/styles';
 import {useCart} from "./redux/hooksCart";
 import './App.css';
-
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import {StyledBadge} from "./styled/App.styled";
+import {darkTheme} from "./theme/App.theme";
+import { ThemeProvider} from '@mui/material/styles';
 
 const pages = ['Catalog', 'About us', 'Delivery', "Cart"];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
-    const StyledBadge = styled(Badge)(({ theme }) => ({
-        '& .MuiBadge-badge': {
-            right: -3,
-            top: 13,
-            border: `2px solid ${theme.palette.background.paper}`,
-            padding: '0 4px',
-        },
-    }));
-
-    const darkTheme = createTheme({
-        palette: {
-            mode: 'dark',
-            primary: {
-                main: '#1976d2',
-            },
-        },
-    });
-
     const {cartList} = useCart()
 
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -72,7 +52,7 @@ function ResponsiveAppBar() {
     };
 
     return (
-    <div style={{minHeight: "100%", display: "flex", flexDirection: "column"}}>
+    <Box sx={{minHeight: "100%", display: "flex", flexDirection: "column"}}>
       <header>
           <ThemeProvider theme={darkTheme}>
             <AppBar position="static">
@@ -230,7 +210,7 @@ function ResponsiveAppBar() {
           </ThemeProvider>
 
       </footer>
-    </div>
+    </Box>
 );
 }
 export default ResponsiveAppBar;
